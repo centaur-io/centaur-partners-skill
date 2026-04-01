@@ -58,3 +58,11 @@ export CENTAUR_PARTNER_API_KEY='<partner-api-key>'
 ```
 
 Then use the REST examples in [examples-curl.md](examples-curl.md).
+
+## One-time chat fallback
+
+If the user does not want to set an environment variable yet, they may paste a partner API key directly into the current chat session for one-time REST use.
+
+- Treat the pasted key as transient session input only.
+- Do not echo it back in responses.
+- Do not store it in files, config, or shell history.

@@ -1,6 +1,6 @@
 ---
 name: centaur-partners-api
-description: Use Centaur Partners API over MCP when Centaur is already configured in Claude, Cursor, or Codex; otherwise use REST with the CENTAUR_PARTNER_API_KEY environment variable to fetch and summarize partner trading events or generate correct curl commands.
+description: Use Centaur Partners API over MCP when Centaur is already configured in Claude, Cursor, or Codex; otherwise use REST with CENTAUR_PARTNER_API_KEY or a partner API key pasted into the current chat session to fetch and summarize partner trading events or generate correct curl commands.
 ---
 
 # Centaur Partners API
@@ -13,7 +13,9 @@ Use this skill when a user wants to access Centaur partner events directly from 
 2. If MCP is available, prefer MCP and call `list_events`.
 3. If MCP is not available, check whether `CENTAUR_PARTNER_API_KEY` is set.
 4. If the env var exists, use REST with `x-api-key`.
-5. If neither MCP nor the env var is available, stop and give setup instructions instead of inventing credentials or unsupported flows.
+5. Otherwise ask whether the user wants to paste a partner API key into the current chat for one-time use.
+6. If the user pastes a key, use it transiently for this session only and do not persist or echo it back.
+7. If none of those paths are available, stop and give setup instructions instead of inventing credentials or unsupported flows.
 
 ## Current surface
 
@@ -41,6 +43,7 @@ If MCP is not configured, look for `CENTAUR_PARTNER_API_KEY`.
 
 - If present, write or run curl commands against `GET /api/v1/events`.
 - Always send `x-api-key: $CENTAUR_PARTNER_API_KEY`.
+- If the env var is not present but the user pastes a partner API key in chat, use that key only for the current session.
 - Keep filters and pagination explicit.
 - Do not claim SDKs, OAuth flows, or endpoints that Centaur does not expose.
 
@@ -51,8 +54,10 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 If the agent cannot find MCP config and `CENTAUR_PARTNER_API_KEY` is not set:
 
 - say that Centaur is not configured yet
+- offer a one-time path where the user can paste a partner API key into the current chat
+- if the user pastes a key, do not echo it back or persist it anywhere
 - point the user to [references/client-setup.md](references/client-setup.md)
-- ask them to either configure MCP or export `CENTAUR_PARTNER_API_KEY`
+- ask them to either configure MCP, export `CENTAUR_PARTNER_API_KEY`, or paste a key for the current session
 
 ## References
 

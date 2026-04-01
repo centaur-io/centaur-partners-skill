@@ -11,7 +11,7 @@ npx skills add https://github.com/zap-xyz/centaur-partners-skill
 ## What it covers
 
 - Prefer Centaur MCP when the client already has Centaur configured.
-- Fall back to REST only when `CENTAUR_PARTNER_API_KEY` is available.
+- Fall back to REST when `CENTAUR_PARTNER_API_KEY` is available or when the user provides a one-time key in chat.
 - Generate correct curl commands for `GET /api/v1/events`.
 - Guide Claude, Cursor, and Codex setup for the remote Centaur MCP server.
 
