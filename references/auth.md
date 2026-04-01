@@ -1,0 +1,24 @@
+# Auth
+
+Centaur uses the same partner API key across MCP and REST.
+
+## Decision order
+
+1. Prefer MCP if the current client already has a Centaur MCP server configured.
+2. Otherwise check for `CENTAUR_PARTNER_API_KEY`.
+3. If the env var exists, use REST.
+4. If neither is available, stop and ask the user to configure Centaur rather than inventing credentials.
+
+## Headers
+
+- MCP: `Authorization: Bearer <partner-api-key>`
+- REST: `x-api-key: <partner-api-key>`
+
+## Required permission
+
+- `events.read`
+
+## Notes
+
+- Do not assume OAuth, session auth, or SDK-specific auth flows exist.
+- Do not log, echo, or persist a real API key in output unless the user explicitly asks for that behavior.
