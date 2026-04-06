@@ -5,7 +5,7 @@ Public installable skill for Centaur Partners API.
 ## Install
 
 ```bash
-npx skills add https://github.com/zap-xyz/centaur-partners-skill
+npx skills add https://github.com/centaur-io/centaur-partners-skill
 ```
 
 ## What it covers
