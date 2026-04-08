@@ -16,9 +16,10 @@ Centaur uses the same partner API key across MCP and REST.
 - MCP: `Authorization: Bearer <partner-api-key>`
 - REST: `x-api-key: <partner-api-key>`
 
-## Required permission
+## Access shape
 
-- `events.read`
+- The same key format works across events, messages, positions, and stats.
+- Individual reads can still be scope-gated by the server.
 
 ## Notes
 

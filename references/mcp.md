@@ -6,31 +6,16 @@ Use MCP when the client already has Centaur configured.
 
 - `https://partners.centaur.io/mcp`
 
-## Tool inventory
+## Capability families
 
-- `list_events`
-
-## Resource inventory
-
-- `centaur://partners-api/capabilities`
-- `centaur://partners-api/event-filters`
+- events
+- messages
+- positions
+- stats
 
 ## Use pattern
 
-- Start with `list_events` and the narrowest valid arguments for the request.
-- Use explicit `limit`, `from`, `to`, and entity filters when they matter.
-- Keep pagination deliberate. `after` and `before` cannot be used together.
-- Respect the history floor: `2026-01-01T00:00:00.000Z`.
-
-## Supported arguments
-
-- `traderIds`
-- `assetIds`
-- `directions`
-- `eventTypes`
-- `from`
-- `to`
-- `limit`
-- `after`
-- `before`
-- `sortOrder`
+- Start with the narrowest matching read for the request.
+- Use explicit `limit` and entity filters when they matter.
+- Keep list reads paginated deliberately.
+- Use the connected MCP server as the source of truth for exact tools, resources, and argument shapes.

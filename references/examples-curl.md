@@ -7,23 +7,23 @@ curl -s 'https://partners.centaur.io/api/v1/events?limit=10' \
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```
 
-## Filter by asset and direction
+## Messages in a time window
 
 ```bash
-curl -s 'https://partners.centaur.io/api/v1/events?assetIds=34&directions=long&limit=10' \
+curl -s 'https://partners.centaur.io/api/v1/messages?eventTypes=open,close&startTime=2026-03-01T00:00:00.000Z&endTime=2026-03-07T23:59:59.999Z&limit=10' \
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```
 
-## Bounded time window
+## Valid closed positions
 
 ```bash
-curl -s 'https://partners.centaur.io/api/v1/events?from=2026-02-01T00:00:00.000Z&to=2026-02-07T23:59:59.999Z&limit=25&sortOrder=asc' \
+curl -s 'https://partners.centaur.io/api/v1/positions/closed/valid?assetIds=34&limit=10' \
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```
 
 ## Forward pagination
 
 ```bash
-curl -s 'https://partners.centaur.io/api/v1/events?limit=25&after=<cursor>' \
+curl -s 'https://partners.centaur.io/api/v1/events?limit=25&cursor=<nextCursor>' \
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```

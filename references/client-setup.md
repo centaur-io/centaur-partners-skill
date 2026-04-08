@@ -59,6 +59,8 @@ export CENTAUR_PARTNER_API_KEY='<partner-api-key>'
 
 Then use the REST examples in [examples-curl.md](examples-curl.md).
 
+Once connected, the client can use Centaur across events, messages, positions, and stats.
+
 ## One-time chat fallback
 
 If the user does not want to set an environment variable yet, they may paste a partner API key directly into the current chat session for one-time REST use.

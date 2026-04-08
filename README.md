@@ -12,8 +12,18 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 
 - Prefer Centaur MCP when the client already has Centaur configured.
 - Fall back to REST when `CENTAUR_PARTNER_API_KEY` is available or when the user provides a one-time key in chat.
-- Generate correct curl commands for `GET /api/v1/events`.
+- Help with the broader read-only trading data surface across events, messages, positions, and stats.
+- Generate correct curl commands for the matching `GET /api/v1/*` read family, not only events.
 - Guide Claude, Cursor, and Codex setup for the remote Centaur MCP server.
+
+## Current contract at a glance
+
+- REST surface: `https://partners.centaur.io/api/v1/*`
+- MCP endpoint: `https://partners.centaur.io/mcp`
+- Time-bounded reads use `startTime` and `endTime`
+- List-style reads use forward-only cursor pagination
+- MCP uses bearer auth and supports `?api_key=` as a compatibility fallback when a client cannot set headers
+- Exact live request shapes and examples live in the product docs below
 
 ## Repository layout
 
