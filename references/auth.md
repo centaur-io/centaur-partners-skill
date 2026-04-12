@@ -1,6 +1,6 @@
 # Auth
 
-Centaur uses the same partner API key across MCP and REST.
+Centaur uses different auth patterns by surface.
 
 ## Decision order
 
@@ -13,7 +13,8 @@ Centaur uses the same partner API key across MCP and REST.
 
 ## Headers
 
-- MCP: `Authorization: Bearer <partner-api-key>`
+- Preferred MCP: client-managed OAuth with Dynamic Client Registration when supported by the client
+- MCP compatibility fallback: `Authorization: Bearer <partner-api-key>`
 - REST: `x-api-key: <partner-api-key>`
 
 ## Access shape
@@ -23,6 +24,6 @@ Centaur uses the same partner API key across MCP and REST.
 
 ## Notes
 
-- Do not assume OAuth, session auth, or SDK-specific auth flows exist.
+- Do not try to drive an OAuth flow or Dynamic Client Registration from the skill itself. Either the client is already connected to the Centaur MCP server or the skill should fall back to REST.
 - Do not log, echo, or persist a real API key in output unless the user explicitly asks for that behavior.
 - If the user pastes a key in chat, treat it as transient session input only.

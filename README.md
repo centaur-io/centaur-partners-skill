@@ -22,7 +22,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - MCP endpoint: `https://partners.centaur.io/mcp`
 - Time-bounded reads use `startTime` and `endTime`
 - List-style reads use forward-only cursor pagination
-- MCP uses bearer auth and supports `?api_key=` as a compatibility fallback when a client cannot set headers
+- MCP prefers client-managed OAuth and Dynamic Client Registration and keeps bearer API-key auth plus `?api_key=` as compatibility fallbacks
 - Exact live request shapes and examples live in the product docs below
 
 ## Repository layout

@@ -2,7 +2,25 @@
 
 Use MCP first whenever possible.
 
+Preferred MCP server URL:
+
+```text
+https://partners.centaur.io/mcp
+```
+
+If the client supports MCP OAuth, register the plain URL, let the client dynamically register itself if needed, and complete the Centaur sign-in and consent flow in the browser. Public Dynamic Client Registration is only available for PKCE public clients. Redirect URIs must use `https`, a native app/private-use scheme, or loopback `http` during local development. OAuth bearer tokens come from the OAuth flow itself rather than a separate generic JWT helper endpoint.
+
+If the client cannot complete OAuth yet, use the compatibility instructions below.
+
 ## Claude Code
+
+Preferred:
+
+```bash
+claude mcp add --transport http centaur-partners https://partners.centaur.io/mcp
+```
+
+Compatibility fallback:
 
 ```bash
 claude mcp add --transport http centaur-partners https://partners.centaur.io/mcp \
@@ -11,7 +29,19 @@ claude mcp add --transport http centaur-partners https://partners.centaur.io/mcp
 
 ## Cursor
 
-Add Centaur to `~/.cursor/mcp.json`:
+Preferred `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "centaur-partners": {
+      "url": "https://partners.centaur.io/mcp"
+    }
+  }
+}
+```
+
+Compatibility fallback:
 
 ```json
 {
@@ -34,6 +64,14 @@ export CENTAUR_PARTNER_API_KEY='<partner-api-key>'
 
 ## Codex
 
+Preferred:
+
+```bash
+codex mcp add centaur-partners --url https://partners.centaur.io/mcp
+```
+
+Compatibility fallback:
+
 ```bash
 codex mcp add centaur-partners --url https://partners.centaur.io/mcp \
   --header "Authorization: Bearer <partner-api-key>"
@@ -48,6 +86,8 @@ url = "https://partners.centaur.io/mcp"
 [mcp_servers.centaur-partners.headers]
 Authorization = "Bearer <partner-api-key>"
 ```
+
+For interactive Codex clients, prefer the plain MCP URL and let Codex dynamically register the OAuth client when prompted. Some OpenAI API-side MCP integrations may still require the application to supply an access token directly.
 
 ## If MCP is not configured
 

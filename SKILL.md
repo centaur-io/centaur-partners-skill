@@ -1,6 +1,6 @@
 ---
 name: centaur-partners-api
-description: Use Centaur Partners API over MCP when Centaur is already configured in Claude, Cursor, or Codex; otherwise use REST with CENTAUR_PARTNER_API_KEY or a partner API key pasted into the current chat session to fetch and summarize read-only Centaur partner data or generate correct curl commands.
+description: Use Centaur Partners API over MCP when Centaur is already configured in Claude, ChatGPT, Cursor, Codex, or Claude Code; otherwise use REST with CENTAUR_PARTNER_API_KEY or a partner API key pasted into the current chat session to fetch and summarize read-only Centaur partner data or generate correct curl commands.
 ---
 
 # Centaur Partners API
@@ -22,7 +22,8 @@ Use this skill when a user wants to access Centaur partner data directly from an
 - MCP endpoint: `https://partners.centaur.io/mcp`
 - Capability families: events, messages, positions, and stats
 - REST fallback uses `https://partners.centaur.io/api/v1/*`
-- MCP auth: `Authorization: Bearer <partner-api-key>`
+- Preferred MCP auth: client-managed OAuth with Dynamic Client Registration when the client needs it
+- MCP compatibility auth: `Authorization: Bearer <partner-api-key>`
 - REST auth: `x-api-key: <partner-api-key>`
 
 ## Use MCP when available
@@ -30,6 +31,7 @@ Use this skill when a user wants to access Centaur partner data directly from an
 Prefer MCP for Claude, Cursor, Codex, or any client that already has Centaur configured.
 
 - Use the existing Centaur MCP server rather than rewriting requests as raw HTTP.
+- Treat the already-configured client as the owner of the auth flow. The skill should not try to run OAuth or Dynamic Client Registration itself.
 - Start with the narrowest matching read for the user's request.
 - Keep list reads paginated and bounded.
 - Treat the connected server as the source of truth for the exact live tool inventory and request shapes.
@@ -44,7 +46,7 @@ If MCP is not configured, look for `CENTAUR_PARTNER_API_KEY`.
 - Always send `x-api-key: $CENTAUR_PARTNER_API_KEY`.
 - If the env var is not present but the user pastes a partner API key in chat, use that key only for the current session.
 - Keep list reads bounded and paginated.
-- Do not claim SDKs, OAuth flows, or endpoints that Centaur does not expose.
+- Do not invent OAuth flows inside the skill. Either the client is already connected to Centaur MCP or the skill should fall back to REST.
 
 Read [references/rest.md](references/rest.md) and [references/examples-curl.md](references/examples-curl.md) for concrete request patterns.
 

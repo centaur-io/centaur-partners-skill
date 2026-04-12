@@ -6,6 +6,12 @@ Use MCP when the client already has Centaur configured.
 
 - `https://partners.centaur.io/mcp`
 
+## Auth
+
+- Preferred: client-managed OAuth with Dynamic Client Registration when needed
+- Compatibility fallback: bearer partner API key
+- Last resort for clients with no header support: `?api_key=...`
+
 ## Capability families
 
 - events
