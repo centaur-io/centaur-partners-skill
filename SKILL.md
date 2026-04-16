@@ -21,6 +21,7 @@ Use this skill when a user wants to access Centaur partner data directly from an
 
 - MCP endpoint: `https://partners.centaur.io/mcp`
 - Capability families: events, messages, positions, and stats
+- Direct discovery tools under the stats family: `list_traders` and `list_assets`
 - REST fallback uses `https://partners.centaur.io/api/v1/*`
 - Preferred MCP auth: client-managed OAuth with Dynamic Client Registration when the client needs it
 - MCP compatibility auth: `Authorization: Bearer <partner-api-key>`
@@ -120,10 +121,12 @@ Each event carries three boolean flags: `assumed`, `retrospective`, and `autoGen
 
 ### Choosing the right tool
 
+- Use `list_traders` or `list_assets` first when the user does not already know the right trader ID or asset ID.
 - Use `list_events` when the user wants to see trade activity — what happened, in what order, with source context. Remember to skip assumed and auto-generated events by default.
 - Use `list_valid_closed_positions` when the user wants performance data — realized returns on trades that have clean open and close prices. This tool already excludes unscoreable trades.
 - Use `list_open_positions` when the user wants current exposure — what is held right now and how it is performing.
 - Use `get_trader_stats` when the user wants aggregate metrics — win rate, average return, asset focus.
+- Use `get_asset_stats` when the user wants aggregate metrics for one asset after discovery.
 - Do not use `list_events` to manually compute win rates or ROI by scanning close events. The stats and positions tools exist precisely for that.
 
 ## When blocked
