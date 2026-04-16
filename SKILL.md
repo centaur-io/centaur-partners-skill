@@ -20,8 +20,8 @@ Use this skill when a user wants to access Centaur partner data directly from an
 ## Current surface
 
 - MCP endpoint: `https://partners.centaur.io/mcp`
-- Capability families: events, messages, positions, and stats
-- Direct discovery tools under the stats family: `list_traders` and `list_assets`
+- Capability families: events, messages, positions, discovery, and stats
+- Discovery tools: `list_traders` and `list_assets`
 - REST fallback uses `https://partners.centaur.io/api/v1/*`
 - Preferred MCP auth: client-managed OAuth with Dynamic Client Registration when the client needs it
 - MCP compatibility auth: `Authorization: Bearer <partner-api-key>`

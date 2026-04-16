@@ -99,7 +99,7 @@ export CENTAUR_PARTNER_API_KEY='<partner-api-key>'
 
 Then use the REST examples in [examples-curl.md](examples-curl.md).
 
-Once connected, the client can use Centaur across events, messages, positions, and stats.
+Once connected, the client can use Centaur across events, messages, positions, discovery, and stats.
 
 ## One-time chat fallback
 

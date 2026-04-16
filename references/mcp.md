@@ -17,9 +17,10 @@ Use MCP when the client already has Centaur configured.
 - events
 - messages
 - positions
+- discovery
 - stats
 
-Within the stats family, prefer `list_traders` and `list_assets` for direct discovery when the user does not already know the right IDs.
+Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs.
 
 ## Use pattern
 

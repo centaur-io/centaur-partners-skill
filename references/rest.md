@@ -5,7 +5,7 @@ Use REST when MCP is not configured and `CENTAUR_PARTNER_API_KEY` is available.
 ## Endpoint shape
 
 - Use the matching read family under `GET https://partners.centaur.io/api/v1/*`.
-- Common families include events, messages, positions, and stats.
+- Common families include events, messages, positions, discovery, and stats.
 
 ## Header
 
