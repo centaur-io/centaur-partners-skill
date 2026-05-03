@@ -16,7 +16,7 @@ x-api-key: $CENTAUR_PARTNER_API_KEY
 ## Query guidance
 
 - Use `GET /api/v1/traders` and `GET /api/v1/assets` for direct discovery when the right IDs are not known yet.
-- Use `GET /api/v1/channel-summaries` for generated, privacy-preserving summaries of private Telegram source windows.
+- Use `GET /api/v1/channel-summaries` for generated, privacy-preserving channel summaries.
 - Use explicit filters rather than broad fetches when possible.
 - Historical list reads use `startTime` and `endTime` when explicit bounds are needed.
 - List reads use forward-only cursor pagination via `cursor`.

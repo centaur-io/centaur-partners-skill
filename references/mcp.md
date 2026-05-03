@@ -23,7 +23,7 @@ Use MCP when the client already has Centaur configured.
 
 Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs.
 
-Use `list_channel_summaries` for privacy-preserving insight from private Telegram sources. Do not use raw messages as the first choice for private-channel recaps.
+Use `list_channel_summaries` for privacy-preserving channel insight. Do not use raw messages as the first choice for channel recaps when generated summaries are available.
 
 ## Use pattern
 

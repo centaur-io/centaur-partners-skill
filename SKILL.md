@@ -55,7 +55,7 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 
 Messages are the raw voice of each trader's channel — thesis, macro thinking, sentiment, conviction, and context that cannot be derived from structured event or position data. When using `list_messages`, treat messages as a window into how traders think, not as a second source of trade data.
 
-For private Telegram channel insight, prefer generated channel summaries instead of raw messages. Use `list_channel_summaries` when the user asks for private-channel recaps, paid-channel insight, or privacy-preserving Telegram summaries. Channel summaries are generated server-side and are designed to avoid exposing raw private source messages, source message IDs, source URLs, and private attachment URLs.
+For privacy-preserving channel insight, prefer generated channel summaries instead of raw messages. Use `list_channel_summaries` when the user asks for channel recaps or privacy-preserving Telegram summaries. Channel summaries are generated server-side and are designed to avoid exposing raw source messages, source message IDs, source URLs, and private attachment URLs.
 
 ### Messages vs events
 
