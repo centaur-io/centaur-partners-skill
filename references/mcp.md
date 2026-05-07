@@ -8,9 +8,9 @@ Use MCP when the client already has Centaur configured.
 
 ## Auth
 
-- Preferred: client-managed OAuth with Dynamic Client Registration when needed
-- Compatibility fallback: bearer partner API key
-- Last resort for clients with no header support: `?api_key=...`
+- Official Claude and ChatGPT installs use OAuth.
+- Custom/manual fallback: bearer partner API key.
+- Last-resort custom/manual fallback: `?api_key=...`.
 
 ## Capability families
 
@@ -23,7 +23,7 @@ Use MCP when the client already has Centaur configured.
 
 Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs.
 
-Use `list_channel_summaries` for privacy-preserving channel insight. Do not use raw messages as the first choice for channel recaps when generated summaries are available.
+Use `list_channel_summaries` for privacy-preserving channel insight when authorized. It requires `summaries.read`; if that permission is missing, fall back to `list_messages`.
 
 ## Use pattern
 

@@ -8,9 +8,17 @@ Preferred MCP server URL:
 https://partners.centaur.io/mcp
 ```
 
-If the client supports MCP OAuth, register the plain URL, let the client dynamically register itself if needed, and complete the Centaur sign-in and consent flow in the browser. Public Dynamic Client Registration is only available for PKCE public clients. Redirect URIs must use `https`, a native app/private-use scheme, or loopback `http` during local development. OAuth bearer tokens come from the OAuth flow itself rather than a separate generic JWT helper endpoint.
+Official Claude and ChatGPT installs use OAuth. For custom clients, register the plain URL and complete the Centaur browser sign-in flow when prompted. If the client cannot complete OAuth yet, use the compatibility instructions below.
 
-If the client cannot complete OAuth yet, use the compatibility instructions below.
+## ChatGPT
+
+Preferred:
+
+```text
+https://partners.centaur.io/mcp
+```
+
+Use the official ChatGPT App listing when available. For Developer Mode or custom setup, add the plain MCP URL and complete the Centaur browser sign-in flow.
 
 ## Claude Code
 
@@ -99,7 +107,7 @@ export CENTAUR_PARTNER_API_KEY='<partner-api-key>'
 
 Then use the REST examples in [examples-curl.md](examples-curl.md).
 
-Once connected, the client can use Centaur across events, messages, positions, discovery, and stats.
+Once connected, the client can use Centaur across events, messages, positions, discovery, and stats. Generated Channel Summaries require the extra `summaries.read` permission.
 
 ## One-time chat fallback
 

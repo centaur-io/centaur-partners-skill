@@ -13,13 +13,14 @@ Centaur uses different auth patterns by surface.
 
 ## Headers
 
-- Preferred MCP: client-managed OAuth with Dynamic Client Registration when supported by the client
-- MCP compatibility fallback: `Authorization: Bearer <partner-api-key>`
+- Official Claude and ChatGPT installs: OAuth
+- Custom/manual MCP fallback: `Authorization: Bearer <partner-api-key>`
 - REST: `x-api-key: <partner-api-key>`
 
 ## Access shape
 
 - The same key format works across events, messages, positions, discovery, and stats.
+- Generated Channel Summaries require `summaries.read`; not every default grant or key has it.
 - Individual reads can still be scope-gated by the server.
 
 ## Notes

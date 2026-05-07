@@ -23,9 +23,10 @@ Use this skill when a user wants to access Centaur partner data directly from an
 - Capability families: events, messages, channel summaries, positions, discovery, and stats
 - Discovery tools: `list_traders` and `list_assets`
 - REST fallback uses `https://partners.centaur.io/api/v1/*`
-- Preferred MCP auth: client-managed OAuth with Dynamic Client Registration when the client needs it
-- MCP compatibility auth: `Authorization: Bearer <partner-api-key>`
+- Official Claude and ChatGPT installs use OAuth.
+- API-key MCP auth is only a custom/manual fallback: `Authorization: Bearer <partner-api-key>`.
 - REST auth: `x-api-key: <partner-api-key>`
+- Generated Channel Summaries require `summaries.read`; do not assume every default OAuth grant or API key has it.
 
 ## Use MCP when available
 
@@ -55,7 +56,7 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 
 Messages are the raw voice of each trader's channel — thesis, macro thinking, sentiment, conviction, and context that cannot be derived from structured event or position data. When using `list_messages`, treat messages as a window into how traders think, not as a second source of trade data.
 
-For privacy-preserving channel insight, prefer generated channel summaries instead of raw messages. Use `list_channel_summaries` when the user asks for channel recaps or privacy-preserving Telegram summaries. Channel summaries are generated server-side and are designed to avoid exposing raw source messages, source message IDs, source URLs, and private attachment URLs.
+For privacy-preserving channel insight, prefer generated channel summaries instead of raw messages when `list_channel_summaries` is available and authorized. If `summaries.read` is missing, fall back to `list_messages` and explain that summaries need the summaries permission. Channel summaries are generated server-side and are designed to avoid exposing raw source messages, source message IDs, source URLs, and private attachment URLs.
 
 ### Messages vs events
 

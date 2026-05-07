@@ -12,10 +12,10 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 
 - Prefer Centaur MCP when the client already has Centaur configured.
 - Fall back to REST when `CENTAUR_PARTNER_API_KEY` is available or when the user provides a one-time key in chat.
-- Help with the broader read-only trading data surface across events, messages, positions, discovery, and stats.
+- Help with the broader read-only trading data surface across events, messages, generated channel summaries, positions, discovery, and stats.
 - Support direct trader and asset discovery before detail stats calls.
 - Generate correct curl commands for the matching `GET /api/v1/*` read family, not only events.
-- Guide Claude, Cursor, and Codex setup for the remote Centaur MCP server.
+- Guide Claude, ChatGPT, Cursor, and Codex setup for the remote Centaur MCP server.
 
 ## Current contract at a glance
 
@@ -23,7 +23,9 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - MCP endpoint: `https://partners.centaur.io/mcp`
 - Time-bounded reads use `startTime` and `endTime`
 - List-style reads use forward-only cursor pagination
-- MCP prefers client-managed OAuth and Dynamic Client Registration and keeps bearer API-key auth plus `?api_key=` as compatibility fallbacks
+- Official Claude and ChatGPT installs use OAuth
+- API keys are custom/manual fallback only
+- Generated Channel Summaries require `summaries.read`
 - Exact live request shapes and examples live in the product docs below
 
 ## Repository layout
@@ -33,7 +35,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - `references/mcp.md`: MCP behavior and tool usage
 - `references/rest.md`: REST behavior and query guidance
 - `references/examples-curl.md`: curl examples only
-- `references/client-setup.md`: Claude, Cursor, and Codex setup
+- `references/client-setup.md`: Claude, ChatGPT, Cursor, and Codex setup
 
 ## Product docs
 
