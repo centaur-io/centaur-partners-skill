@@ -56,7 +56,7 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 
 Messages are the raw voice of each trader's channel — thesis, macro thinking, sentiment, conviction, and context that cannot be derived from structured event or position data. When using `list_messages`, treat messages as a window into how traders think, not as a second source of trade data.
 
-For privacy-preserving channel insight, prefer generated channel summaries instead of raw messages when `list_channel_summaries` is available and authorized. If `summaries.read` is missing, fall back to `list_messages` and explain that summaries need the summaries permission. Channel summaries are generated server-side and are designed to avoid exposing raw source messages, source message IDs, source URLs, and private attachment URLs.
+For compact channel insight, prefer generated channel summaries instead of raw messages when `list_channel_summaries` is available and authorized. If `summaries.read` is missing, fall back to `list_messages` and explain that summaries need the summaries permission. Channel summaries are generated server-side and return concise market context without the full source material.
 
 ### Messages vs events
 
