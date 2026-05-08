@@ -25,6 +25,8 @@ Use `list_traders` and `list_assets` as discovery tools when the user does not a
 
 Use `list_channel_summaries` for compact channel insight. If it returns an empty page, fall back to `list_messages` when useful.
 
+For daily summary requests, interpret unqualified days as UTC days. Pass explicit `startTime` and `endTime` bounds such as `2026-05-09T00:00:00.000Z` through `2026-05-10T00:00:00.000Z`; channel summary time filters select Source Windows that overlap the requested interval. Use `limit=50` and paginate with `cursor` when needed.
+
 ## Use pattern
 
 - Start with the narrowest matching read for the request.
