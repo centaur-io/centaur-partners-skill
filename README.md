@@ -25,7 +25,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - List-style reads use forward-only cursor pagination
 - Official Claude and ChatGPT installs use OAuth
 - API keys are custom/manual fallback only
-- Generated Channel Summaries require `summaries.read`
+- Generated Channel Summaries are a standard read family
 - Exact live request shapes and examples live in the product docs below
 
 ## Repository layout

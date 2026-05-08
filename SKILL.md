@@ -26,7 +26,7 @@ Use this skill when a user wants to access Centaur partner data directly from an
 - Official Claude and ChatGPT installs use OAuth.
 - API-key MCP auth is only a custom/manual fallback: `Authorization: Bearer <partner-api-key>`.
 - REST auth: `x-api-key: <partner-api-key>`
-- Generated Channel Summaries require `summaries.read`; do not assume every default OAuth grant or API key has it.
+- Generated Channel Summaries are a standard read family.
 
 ## Use MCP when available
 
@@ -56,7 +56,7 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 
 Messages are the raw voice of each trader's channel — thesis, macro thinking, sentiment, conviction, and context that cannot be derived from structured event or position data. When using `list_messages`, treat messages as a window into how traders think, not as a second source of trade data.
 
-For compact channel insight, prefer generated channel summaries instead of raw messages when `list_channel_summaries` is available and authorized. If `summaries.read` is missing, fall back to `list_messages` and explain that summaries need the summaries permission. Channel summaries are generated server-side and return concise market context without the full source material.
+For compact channel insight, prefer generated channel summaries instead of raw messages when `list_channel_summaries` is available. If the tool returns an empty page, fall back to `list_messages` when useful. Channel summaries are generated server-side and return concise market context without the full source material.
 
 ### Messages vs events
 

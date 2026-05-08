@@ -19,8 +19,7 @@ Centaur uses different auth patterns by surface.
 
 ## Access shape
 
-- The same key format works across events, messages, positions, discovery, and stats.
-- Generated Channel Summaries require `summaries.read`; not every default grant or key has it.
+- The same key format works across events, messages, channel summaries, positions, discovery, and stats.
 - Individual reads can still be scope-gated by the server.
 
 ## Notes

@@ -23,7 +23,7 @@ Use MCP when the client already has Centaur configured.
 
 Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs.
 
-Use `list_channel_summaries` for compact channel insight when authorized. It requires `summaries.read`; if that permission is missing, fall back to `list_messages`.
+Use `list_channel_summaries` for compact channel insight. If it returns an empty page, fall back to `list_messages` when useful.
 
 ## Use pattern
 
