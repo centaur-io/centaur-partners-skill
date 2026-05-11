@@ -20,6 +20,9 @@ Centaur uses different auth patterns by surface.
 ## Access shape
 
 - The same key format works across events, messages, aggregate summaries, channel summaries, positions, discovery, and stats.
+- MCP OAuth is available to active, email-verified signed-up users.
+- API keys are self-serve REST/custom-client credentials, not manual partner approval.
+- Summary reads may still return empty pages without Summary Entitlement.
 - Individual reads can still be scope-gated by the server.
 
 ## Notes
