@@ -24,8 +24,10 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - Time-bounded reads use `startTime` and `endTime`
 - List-style reads use forward-only cursor pagination
 - Official Claude and ChatGPT installs use OAuth
-- API keys are custom/manual fallback only
+- OAuth is available to active, email-verified signed-up users
+- API keys are self-serve REST/custom-client credentials and custom/manual MCP fallback only
 - Generated Aggregate Summaries and Generated Channel Summaries are standard read families
+- Summary tools may return empty pages when the signed-up user does not have Summary Entitlement
 - Exact live request shapes and examples live in the product docs below
 
 ## Repository layout

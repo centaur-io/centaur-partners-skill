@@ -8,7 +8,7 @@ Preferred MCP server URL:
 https://partners.centaur.io/mcp
 ```
 
-Official Claude and ChatGPT installs use OAuth. For custom clients, register the plain URL and complete the Centaur browser sign-in flow when prompted. If the client cannot complete OAuth yet, use the compatibility instructions below.
+Official Claude and ChatGPT installs use OAuth for active, email-verified signed-up users. For custom clients, register the plain URL and complete the Centaur browser sign-in flow when prompted. If the client cannot complete OAuth yet, use the compatibility instructions below.
 
 ## ChatGPT
 
@@ -111,7 +111,7 @@ Once connected, the client can use Centaur across events, messages, generated ag
 
 ## One-time chat fallback
 
-If the user does not want to set an environment variable yet, they may paste a partner API key directly into the current chat session for one-time REST use.
+If the user does not want to set an environment variable yet, they may create a self-serve API key in Centaur and paste it directly into the current chat session for one-time REST use.
 
 - Treat the pasted key as transient session input only.
 - Do not echo it back in responses.
