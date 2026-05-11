@@ -21,6 +21,13 @@ curl -s 'https://partners.centaur.io/api/v1/channel-summaries?startTime=2026-05-
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```
 
+## Generated aggregate summaries for a UTC day
+
+```bash
+curl -s 'https://partners.centaur.io/api/v1/aggregate-summaries?startTime=2026-05-09T00:00:00.000Z&endTime=2026-05-10T00:00:00.000Z&limit=50' \
+  -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
+```
+
 ## Valid closed positions
 
 ```bash

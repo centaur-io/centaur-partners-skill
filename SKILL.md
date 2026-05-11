@@ -20,13 +20,13 @@ Use this skill when a user wants to access Centaur partner data directly from an
 ## Current surface
 
 - MCP endpoint: `https://partners.centaur.io/mcp`
-- Capability families: events, messages, channel summaries, positions, discovery, and stats
+- Capability families: events, messages, aggregate summaries, channel summaries, positions, discovery, and stats
 - Discovery tools: `list_traders` and `list_assets`
 - REST fallback uses `https://partners.centaur.io/api/v1/*`
 - Official Claude and ChatGPT installs use OAuth.
 - API-key MCP auth is only a custom/manual fallback: `Authorization: Bearer <partner-api-key>`.
 - REST auth: `x-api-key: <partner-api-key>`
-- Generated Channel Summaries are a standard read family.
+- Generated Aggregate Summaries and Generated Channel Summaries are standard read families.
 
 ## Use MCP when available
 
@@ -56,7 +56,7 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 
 Messages are the raw voice of each trader's channel — thesis, macro thinking, sentiment, conviction, and context that cannot be derived from structured event or position data. When using `list_messages`, treat messages as a window into how traders think, not as a second source of trade data.
 
-For compact channel insight, prefer generated channel summaries instead of raw messages when `list_channel_summaries` is available. If the tool returns an empty page, fall back to `list_messages` when useful. Channel summaries are generated server-side and return concise market context without the full source material.
+For market-wide insight, prefer generated aggregate summaries when `list_aggregate_summaries` is available. Use generated channel summaries for source-window-specific texture when `list_channel_summaries` is available. If summary tools return empty pages, fall back to `list_messages` when useful. Summaries are generated server-side and return concise market context without the full source material.
 
 ### Messages vs events
 
@@ -82,7 +82,8 @@ Not all messages carry equal weight. Traders share a wide range of content — m
 
 When asked for a daily summary, channel recap, or "what happened yesterday":
 
-- Use generated channel summaries first when `list_channel_summaries` is available.
+- Use generated aggregate summaries first for market-wide daily summaries when `list_aggregate_summaries` is available.
+- Use generated channel summaries when the user asks for channel-level/source-window texture or when aggregate summaries are unavailable.
 - Interpret "today" and other unqualified calendar-day requests as UTC days by default.
 - Pass explicit UTC day bounds as `startTime` and `endTime`, using the next UTC midnight as the exclusive end bound.
 - Request `limit=50` for daily digests and paginate with `cursor` when more summaries are needed.

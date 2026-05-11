@@ -12,7 +12,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 
 - Prefer Centaur MCP when the client already has Centaur configured.
 - Fall back to REST when `CENTAUR_PARTNER_API_KEY` is available or when the user provides a one-time key in chat.
-- Help with the broader read-only trading data surface across events, messages, generated channel summaries, positions, discovery, and stats.
+- Help with the broader read-only trading data surface across events, messages, generated aggregate summaries, generated channel summaries, positions, discovery, and stats.
 - Support direct trader and asset discovery before detail stats calls.
 - Generate correct curl commands for the matching `GET /api/v1/*` read family, not only events.
 - Guide Claude, ChatGPT, Cursor, and Codex setup for the remote Centaur MCP server.
@@ -25,7 +25,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - List-style reads use forward-only cursor pagination
 - Official Claude and ChatGPT installs use OAuth
 - API keys are custom/manual fallback only
-- Generated Channel Summaries are a standard read family
+- Generated Aggregate Summaries and Generated Channel Summaries are standard read families
 - Exact live request shapes and examples live in the product docs below
 
 ## Repository layout

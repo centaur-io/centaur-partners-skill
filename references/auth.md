@@ -19,7 +19,7 @@ Centaur uses different auth patterns by surface.
 
 ## Access shape
 
-- The same key format works across events, messages, channel summaries, positions, discovery, and stats.
+- The same key format works across events, messages, aggregate summaries, channel summaries, positions, discovery, and stats.
 - Individual reads can still be scope-gated by the server.
 
 ## Notes
