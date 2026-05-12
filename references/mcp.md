@@ -25,7 +25,7 @@ Use MCP when the client already has Centaur configured.
 
 Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs.
 
-Use `list_aggregate_summaries` for market-wide generated insight across eligible sources. Use `list_channel_summaries` for compact channel-level/source-window insight. If summary tools return empty pages, the user may lack Summary Entitlement; fall back to `list_messages` when useful.
+Use `list_aggregate_summaries` for market-wide generated insight across eligible sources. Use `list_channel_summaries` for compact channel-level/source-window insight. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful.
 
 For daily summary requests, interpret unqualified days as UTC days. Pass explicit `startTime` and `endTime` bounds such as `2026-05-09T00:00:00.000Z` through `2026-05-10T00:00:00.000Z`; aggregate and channel summary time filters select windows that overlap the requested interval. Use `limit=50` and paginate with `cursor` when needed.
 

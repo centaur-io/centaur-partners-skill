@@ -58,7 +58,7 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 
 Messages are the raw voice of each trader's channel — thesis, macro thinking, sentiment, conviction, and context that cannot be derived from structured event or position data. When using `list_messages`, treat messages as a window into how traders think, not as a second source of trade data.
 
-For market-wide insight, prefer generated aggregate summaries when `list_aggregate_summaries` is available. Use generated channel summaries for source-window-specific texture when `list_channel_summaries` is available. If summary tools return empty pages, the user may lack Summary Entitlement; fall back to `list_messages` when useful. Summaries are generated server-side and return concise market context without the full source material.
+For market-wide insight, prefer generated aggregate summaries when `list_aggregate_summaries` is available. Use generated channel summaries for source-window-specific texture when `list_channel_summaries` is available. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful. Summaries are generated server-side and return concise market context without the full source material.
 
 ### Messages vs events
 
