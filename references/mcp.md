@@ -10,7 +10,7 @@ Use MCP when the client already has Centaur configured.
 
 - Official Claude and ChatGPT installs use OAuth.
 - OAuth is available to active, email-verified signed-up users.
-- Custom/manual fallback: bearer partner API key.
+- Custom/manual fallback: bearer header with a Centaur API key.
 - Last-resort custom/manual fallback: `?api_key=...`.
 
 ## Capability families

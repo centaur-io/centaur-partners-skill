@@ -25,14 +25,14 @@ Use the official ChatGPT App listing when available. For Developer Mode or custo
 Preferred:
 
 ```bash
-claude mcp add --transport http centaur-partners https://partners.centaur.io/mcp
+claude mcp add --transport http centaur https://partners.centaur.io/mcp
 ```
 
 Compatibility fallback:
 
 ```bash
-claude mcp add --transport http centaur-partners https://partners.centaur.io/mcp \
-  --header "Authorization: Bearer <partner-api-key>"
+claude mcp add --transport http centaur https://partners.centaur.io/mcp \
+  --header "Authorization: Bearer <api-key>"
 ```
 
 ## Cursor
@@ -42,7 +42,7 @@ Preferred `~/.cursor/mcp.json`:
 ```json
 {
   "mcpServers": {
-    "centaur-partners": {
+    "centaur": {
       "url": "https://partners.centaur.io/mcp"
     }
   }
@@ -54,7 +54,7 @@ Compatibility fallback:
 ```json
 {
   "mcpServers": {
-    "centaur-partners": {
+    "centaur": {
       "url": "https://partners.centaur.io/mcp",
       "headers": {
         "Authorization": "Bearer ${env:CENTAUR_PARTNER_API_KEY}"
@@ -67,7 +67,7 @@ Compatibility fallback:
 Export the same key for direct REST fallback:
 
 ```bash
-export CENTAUR_PARTNER_API_KEY='<partner-api-key>'
+export CENTAUR_PARTNER_API_KEY='<api-key>'
 ```
 
 ## Codex
@@ -75,24 +75,24 @@ export CENTAUR_PARTNER_API_KEY='<partner-api-key>'
 Preferred:
 
 ```bash
-codex mcp add centaur-partners --url https://partners.centaur.io/mcp
+codex mcp add centaur --url https://partners.centaur.io/mcp
 ```
 
 Compatibility fallback:
 
 ```bash
-codex mcp add centaur-partners --url https://partners.centaur.io/mcp \
-  --header "Authorization: Bearer <partner-api-key>"
+codex mcp add centaur --url https://partners.centaur.io/mcp \
+  --header "Authorization: Bearer <api-key>"
 ```
 
 Optional persistent config:
 
 ```toml
-[mcp_servers.centaur-partners]
+[mcp_servers.centaur]
 url = "https://partners.centaur.io/mcp"
 
-[mcp_servers.centaur-partners.headers]
-Authorization = "Bearer <partner-api-key>"
+[mcp_servers.centaur.headers]
+Authorization = "Bearer <api-key>"
 ```
 
 For interactive Codex clients, prefer the plain MCP URL and let Codex dynamically register the OAuth client when prompted. Some OpenAI API-side MCP integrations may still require the application to supply an access token directly.
@@ -102,7 +102,7 @@ For interactive Codex clients, prefer the plain MCP URL and let Codex dynamicall
 Export:
 
 ```bash
-export CENTAUR_PARTNER_API_KEY='<partner-api-key>'
+export CENTAUR_PARTNER_API_KEY='<api-key>'
 ```
 
 Then use the REST examples in [examples-curl.md](examples-curl.md).

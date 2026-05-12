@@ -1,6 +1,6 @@
-# Centaur Partners Skill
+# Centaur API Skill
 
-Public installable skill for Centaur Partners API.
+Public installable skill for the Centaur API.
 
 ## Install
 
@@ -11,7 +11,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 ## What it covers
 
 - Prefer Centaur MCP when the client already has Centaur configured.
-- Fall back to REST when `CENTAUR_PARTNER_API_KEY` is available or when the user provides a one-time key in chat.
+- Fall back to REST when the compatibility env var `CENTAUR_PARTNER_API_KEY` is available or when the user provides a one-time key in chat.
 - Help with the broader read-only trading data surface across events, messages, generated aggregate summaries, generated channel summaries, positions, discovery, and stats.
 - Support direct trader and asset discovery before detail stats calls.
 - Generate correct curl commands for the matching `GET /api/v1/*` read family, not only events.

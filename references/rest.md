@@ -1,6 +1,6 @@
 # REST
 
-Use REST when MCP is not configured and `CENTAUR_PARTNER_API_KEY` is available.
+Use REST when MCP is not configured and the compatibility env var `CENTAUR_PARTNER_API_KEY` is available.
 
 ## Endpoint shape
 
