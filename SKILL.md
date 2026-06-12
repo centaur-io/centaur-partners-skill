@@ -88,7 +88,7 @@ When asked for a daily summary, channel recap, or "what happened yesterday":
 - Use generated channel summaries when the user asks for channel-level/source-window texture or when aggregate summaries are unavailable.
 - Interpret "today" and other unqualified calendar-day requests as UTC days by default.
 - Pass explicit UTC day bounds as `startTime` and `endTime`, using the next UTC midnight as the exclusive end bound.
-- Request `limit=50` for daily digests and paginate with `cursor` when more summaries are needed.
+- Request `limit=50` for daily digests; use up to `limit=200` and paginate with `cursor` when more summaries are needed.
 - Lead with the most consequential macro-level observations: major directional shifts, consensus vs contrarian positioning, notable changes in sentiment.
 - Group by theme or narrative rather than by trader — "thesis 1" or "thesis 2" rather than trader-by-trader recaps.
 - End with quick-hit individual calls only where they add information not covered by the thematic grouping.

@@ -20,7 +20,7 @@ x-api-key: $CENTAUR_PARTNER_API_KEY
 - Use `GET /api/v1/channel-summaries` for compact generated channel summaries.
 - Use explicit filters rather than broad fetches when possible.
 - Historical list reads use `startTime` and `endTime` when explicit bounds are needed.
-- For aggregate and channel summaries, `startTime` and `endTime` select windows that overlap the requested interval. For "today" or other unqualified daily summary requests, use UTC day bounds and request `limit=50`.
+- For aggregate and channel summaries, `startTime` and `endTime` select windows that overlap the requested interval. For "today" or other unqualified daily summary requests, use UTC day bounds and request `limit=50`; use up to `limit=200` for broader pages.
 - List reads use forward-only cursor pagination via `cursor`.
 - Stats reads return aggregate subject and summary data instead of list pages.
 - Use the main Centaur docs site for the exact live endpoint, query, and response contract.
