@@ -28,10 +28,10 @@ curl -s 'https://partners.centaur.io/api/v1/aggregate-summaries?startTime=2026-0
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```
 
-## Valid closed positions
+## Position history
 
 ```bash
-curl -s 'https://partners.centaur.io/api/v1/positions/closed/valid?assetIds=34&limit=10' \
+curl -s 'https://partners.centaur.io/api/v1/positions?assetIds=34&limit=10' \
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```
 

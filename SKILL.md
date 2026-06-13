@@ -62,7 +62,7 @@ For market-wide insight, prefer generated aggregate summaries when `list_aggrega
 
 ### Messages vs events
 
-Trade execution details (what was opened, closed, at what price, with what return) belong to `list_events`, `list_open_positions`, and `list_valid_closed_positions`. Do not use messages to reconstruct or re-explain trades. When summarizing messages, focus on the reasoning, narrative, and sentiment — the why and the worldview — not the what. If a user asks about specific trades, direct them to the events and positions tools instead.
+Trade execution details (what was opened, closed, and how positions performed) belong to `list_events`, `list_positions`, and `list_open_positions`. Do not use messages to reconstruct or re-explain trades. When summarizing messages, focus on the reasoning, narrative, and sentiment — the why and the worldview — not the what. If a user asks about specific trades, direct them to the events and positions tools instead.
 
 ### Volume awareness
 
@@ -133,10 +133,10 @@ Each event carries three boolean flags: `assumed`, `retrospective`, and `autoGen
 
 - Use `list_traders` or `list_assets` first when the user does not already know the right trader ID or asset ID.
 - Use `list_events` when the user wants to see trade activity — what happened, in what order, with source context. Remember to skip assumed and auto-generated events by default.
-- Use `list_valid_closed_positions` when the user wants performance data — realized returns on trades that have clean open and close prices. This tool already excludes unscoreable trades.
+- Use `list_positions` when the user wants historical position performance. It returns open and closed positions with `timeBasedPerformances` for `1D`, `7D`, and `30D`; each window exposes `status` and `returnPercentage` only.
 - Use `list_open_positions` when the user wants current exposure — what is held right now and how it is performing.
-- Use `get_trader_stats` when the user wants aggregate metrics — win rate, average return, asset focus.
-- Use `get_asset_stats` when the user wants aggregate metrics for one asset after discovery.
+- Use `list_trader_stats` when the user wants aggregate metrics — win rate, average time-based return, asset focus.
+- Use `list_asset_stats` when the user wants aggregate positioning metrics for one asset after discovery.
 - Do not use `list_events` to manually compute win rates or ROI by scanning close events. The stats and positions tools exist precisely for that.
 
 ## When blocked
