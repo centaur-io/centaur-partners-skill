@@ -10,7 +10,14 @@ curl -s 'https://partners.centaur.io/api/v1/events?limit=10' \
 ## Messages in a time window
 
 ```bash
-curl -s 'https://partners.centaur.io/api/v1/messages?eventTypes=open,close&startTime=2026-03-01T00:00:00.000Z&endTime=2026-03-07T23:59:59.999Z&limit=10' \
+curl -s 'https://partners.centaur.io/api/v1/messages?startTime=2026-03-01T00:00:00.000Z&endTime=2026-03-07T23:59:59.999Z&limit=10' \
+  -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
+```
+
+## Hydrate source messages by ID
+
+```bash
+curl -s 'https://partners.centaur.io/api/v1/messages?ids=1252615519:15029&limit=10' \
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```
 
@@ -31,7 +38,7 @@ curl -s 'https://partners.centaur.io/api/v1/aggregate-summaries?startTime=2026-0
 ## Position history
 
 ```bash
-curl -s 'https://partners.centaur.io/api/v1/positions?assetIds=34&limit=10' \
+curl -s 'https://partners.centaur.io/api/v1/positions?positionIds=9001,9002&limit=10' \
   -H "x-api-key: $CENTAUR_PARTNER_API_KEY"
 ```
 
