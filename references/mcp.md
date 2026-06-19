@@ -10,22 +10,20 @@ Use MCP when the client already has Centaur configured.
 
 - Official Claude and ChatGPT installs use OAuth.
 - OAuth is available to active, email-verified signed-up users.
-- Custom/manual fallback: bearer header with a Centaur API key.
-- Last-resort custom/manual fallback: `?api_key=...`.
 
 ## Capability families
 
 - events
 - messages
-- aggregate summaries
-- channel summaries
+- Generated Aggregate Narrative Summaries
+- Generated Channel Narrative Summaries
 - positions
 - discovery
 - stats
 
 Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs.
 
-Use `list_aggregate_summaries` for market-wide generated insight across eligible sources. Use `list_channel_summaries` for compact channel-level/source-window insight. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful.
+Use `list_aggregate_summaries` for Generated Aggregate Narrative Summaries across eligible sources. Use `list_channel_summaries` for compact Generated Channel Narrative Summaries. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful.
 
 Use `list_messages` with `ids` to hydrate Source Message IDs referenced by event `messageId`. Message rows do not expose `traderId`, and message reads do not support trader, asset, direction, or event-type filters.
 

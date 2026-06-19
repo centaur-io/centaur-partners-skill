@@ -1,6 +1,6 @@
 ---
-name: centaur-partners-api
-description: Use the Centaur API over MCP when it is already configured in Claude, ChatGPT, Cursor, Codex, or Claude Code; otherwise use REST with CENTAUR_PARTNER_API_KEY or a Centaur API key pasted into the current chat session to fetch and summarize read-only Centaur data or generate correct curl commands.
+name: centaur-api
+description: Use the Centaur API over MCP when it is already configured in Claude, ChatGPT, Cursor, Codex, or Claude Code; use REST with CENTAUR_API_KEY or a Centaur API key pasted into the current chat session to fetch and summarize read-only Centaur data or generate correct curl commands.
 ---
 
 # Centaur API
@@ -11,7 +11,7 @@ Use this skill when a user wants to access Centaur data directly from an agent, 
 
 1. Determine whether the current client already has Centaur configured as an MCP server.
 2. If MCP is available, prefer MCP and use the matching Centaur read family.
-3. If MCP is not available, check whether `CENTAUR_PARTNER_API_KEY` is set.
+3. If MCP is not available or the user asks for REST, check whether `CENTAUR_API_KEY` is set.
 4. If the env var exists, use REST with `x-api-key`.
 5. Otherwise ask whether the user wants to paste a Centaur API key into the current chat for one-time use.
 6. If the user pastes a key, use it transiently for this session only and do not persist or echo it back.
@@ -20,15 +20,14 @@ Use this skill when a user wants to access Centaur data directly from an agent, 
 ## Current surface
 
 - MCP endpoint: `https://partners.centaur.io/mcp`
-- Capability families: events, messages, aggregate summaries, channel summaries, positions, discovery, and stats
+- Capability families: events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats
 - Discovery tools: `list_traders` and `list_assets`
-- REST fallback uses `https://partners.centaur.io/api/v1/*`
+- REST uses `https://partners.centaur.io/api/v1/*`
 - Official Claude and ChatGPT installs use OAuth.
 - OAuth is available to active, email-verified signed-up users.
-- API keys are self-serve REST/custom-client credentials.
-- API-key MCP auth is only a custom/manual fallback: `Authorization: Bearer <api-key>`.
+- API keys are self-serve REST credentials.
 - REST auth: `x-api-key: <api-key>`
-- Generated Aggregate Summaries and Generated Channel Summaries are standard read families.
+- Generated Aggregate Narrative Summaries and Generated Channel Narrative Summaries are standard read families.
 
 ## Use MCP when available
 
@@ -42,15 +41,15 @@ Prefer MCP for Claude, Cursor, Codex, or any client that already has Centaur con
 
 Read [references/mcp.md](references/mcp.md) when you need MCP-specific behavior or request shapes.
 
-## Use REST only as fallback
+## Use REST for direct HTTP access
 
-If MCP is not configured, look for `CENTAUR_PARTNER_API_KEY`.
+If MCP is not configured or the user asks for REST, look for `CENTAUR_API_KEY`.
 
 - If present, write or run curl commands against the matching `GET /api/v1/*` read family.
-- Always send `x-api-key: $CENTAUR_PARTNER_API_KEY`.
+- Always send `x-api-key: $CENTAUR_API_KEY`.
 - If the env var is not present but the user pastes a Centaur API key in chat, use that key only for the current session.
 - Keep list reads bounded and paginated.
-- Do not invent OAuth flows inside the skill. Either the client is already connected to Centaur MCP or the skill should fall back to REST.
+- Do not invent OAuth flows inside the skill. Either the client is already connected to Centaur MCP or the skill should use REST.
 
 Read [references/rest.md](references/rest.md) and [references/examples-curl.md](references/examples-curl.md) for concrete request patterns.
 
@@ -60,7 +59,7 @@ Messages are the raw voice of each trader's channel — thesis, macro thinking, 
 
 `list_messages` supports direct source-message hydration with `ids` plus time bounds, limit, and cursor. It does not expose `traderId` on message rows and does not support trader, asset, direction, or event-type filters.
 
-For market-wide insight, prefer generated aggregate summaries when `list_aggregate_summaries` is available. Use generated channel summaries for source-window-specific texture when `list_channel_summaries` is available. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful. Summaries are generated server-side and return concise market context without the full source material.
+For market-wide insight, prefer Generated Aggregate Narrative Summaries when `list_aggregate_summaries` is available. Use Generated Channel Narrative Summaries for Source Window-specific texture when `list_channel_summaries` is available. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful. Summaries are generated server-side and return concise market context without the full source material.
 
 ### Messages vs events
 
@@ -86,8 +85,8 @@ Not all messages carry equal weight. Traders share a wide range of content — m
 
 When asked for a daily summary, channel recap, or "what happened yesterday":
 
-- Use generated aggregate summaries first for market-wide daily summaries when `list_aggregate_summaries` is available.
-- Use generated channel summaries when the user asks for channel-level/source-window texture or when aggregate summaries are unavailable.
+- Use Generated Aggregate Narrative Summaries first for market-wide daily summaries when `list_aggregate_summaries` is available.
+- Use Generated Channel Narrative Summaries when the user asks for channel-level/Source Window texture or when Generated Aggregate Narrative Summaries are unavailable.
 - Interpret "today" and other unqualified calendar-day requests as UTC days by default.
 - Pass explicit UTC day bounds as `startTime` and `endTime`, using the next UTC midnight as the exclusive end bound.
 - Request `limit=50` for daily digests; use up to `limit=200` and paginate with `cursor` when more summaries are needed.
@@ -143,13 +142,13 @@ Each event carries three boolean flags: `assumed`, `retrospective`, and `autoGen
 
 ## When blocked
 
-If the agent cannot find MCP config and `CENTAUR_PARTNER_API_KEY` is not set:
+If the agent cannot find MCP config and `CENTAUR_API_KEY` is not set:
 
 - say that Centaur is not configured yet
 - offer a one-time path where the user can paste a Centaur API key into the current chat
 - if the user pastes a key, do not echo it back or persist it anywhere
 - point the user to [references/client-setup.md](references/client-setup.md)
-- ask them to either configure MCP, export the compatibility env var `CENTAUR_PARTNER_API_KEY`, or paste a key for the current session
+- ask them to either configure MCP, export `CENTAUR_API_KEY`, or paste a key for the current session
 
 ## References
 
