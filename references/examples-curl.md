@@ -17,9 +17,11 @@ curl -s 'https://partners.centaur.io/api/v1/messages?startTime=2026-03-01T00:00:
 ## Hydrate source messages by ID
 
 ```bash
-curl -s 'https://partners.centaur.io/api/v1/messages?ids=1252615519:15029&limit=10' \
+curl -s 'https://partners.centaur.io/api/v1/messages?ids=<source-message-id>&limit=10' \
   -H "x-api-key: $CENTAUR_API_KEY"
 ```
+
+Use a Source Message ID returned by a message row `id` or event `messageId`. Do not construct one from platform source/message components.
 
 ## Generated Channel Narrative Summaries for a UTC day
 

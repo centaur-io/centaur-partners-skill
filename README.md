@@ -28,6 +28,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - API keys are self-serve REST credentials
 - Generated Aggregate Narrative Summaries and Generated Channel Narrative Summaries are standard read families
 - Summary tools may return empty pages when no generated summaries match the requested window
+- Source Message IDs are opaque; hydrate only IDs returned by message rows or event `messageId`
 - Exact live request shapes and examples live in the product docs below
 
 ## Repository layout

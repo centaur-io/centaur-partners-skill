@@ -19,6 +19,7 @@ x-api-key: $CENTAUR_API_KEY
 - Use `GET /api/v1/aggregate-summaries` for Generated Aggregate Narrative Summaries across eligible sources.
 - Use `GET /api/v1/channel-summaries` for compact Generated Channel Narrative Summaries.
 - Use `ids` on `GET /api/v1/messages` to hydrate Source Message IDs referenced by event `messageId`.
+- Source Message IDs are opaque; do not construct them from Telegram or X platform IDs.
 - Message rows do not expose `traderId`, and message reads do not support trader, asset, direction, or event-type filters.
 - Use explicit filters rather than broad fetches when possible.
 - Historical list reads use `startTime` and `endTime` when explicit bounds are needed.
