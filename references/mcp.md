@@ -21,7 +21,7 @@ Use MCP when the client already has Centaur configured.
 - discovery
 - stats
 
-Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs.
+Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs. `list_traders` accepts `sourcePlatforms` and each trader row includes one `source` identity for the trader's platform.
 
 Use `list_aggregate_summaries` for Generated Aggregate Narrative Summaries across eligible sources. Use `list_channel_summaries` for compact Generated Channel Narrative Summaries. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful.
 
@@ -35,6 +35,7 @@ For daily summary requests, interpret unqualified days as UTC days. Pass explici
 
 - Start with the narrowest matching read for the request.
 - If the request depends on knowing a trader or asset first, discover it directly with `list_traders` or `list_assets` before calling detail stats.
+- For platform-specific trader requests, filter `list_traders` with `sourcePlatforms` and read `source.platform` from the returned row.
 - Use explicit `limit` and entity filters when they matter.
 - Keep list reads paginated deliberately.
 - Use the connected MCP server as the source of truth for exact tools, resources, and argument shapes.

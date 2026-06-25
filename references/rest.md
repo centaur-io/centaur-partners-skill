@@ -16,6 +16,7 @@ x-api-key: $CENTAUR_API_KEY
 ## Query guidance
 
 - Use `GET /api/v1/traders` and `GET /api/v1/assets` for direct discovery when the right IDs are not known yet.
+- `GET /api/v1/traders` accepts `sourcePlatforms`, and each trader row includes one `source` identity for the trader's platform.
 - Use `GET /api/v1/aggregate-summaries` for Generated Aggregate Narrative Summaries across eligible sources.
 - Use `GET /api/v1/channel-summaries` for compact Generated Channel Narrative Summaries.
 - Use `ids` on `GET /api/v1/messages` to hydrate Source Message IDs referenced by event `messageId`.

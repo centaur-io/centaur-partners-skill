@@ -21,7 +21,7 @@ Use this skill when a user wants to access Centaur data directly from an agent, 
 
 - MCP endpoint: `https://partners.centaur.io/mcp`
 - Capability families: events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats
-- Discovery tools: `list_traders` and `list_assets`
+- Discovery tools: `list_traders` and `list_assets`; `list_traders` can filter by `sourcePlatforms`
 - REST uses `https://partners.centaur.io/api/v1/*`
 - Official Claude and ChatGPT installs use OAuth.
 - OAuth is available to active, email-verified signed-up users.
@@ -52,6 +52,12 @@ If MCP is not configured or the user asks for REST, look for `CENTAUR_API_KEY`.
 - Do not invent OAuth flows inside the skill. Either the client is already connected to Centaur MCP or the skill should use REST.
 
 Read [references/rest.md](references/rest.md) and [references/examples-curl.md](references/examples-curl.md) for concrete request patterns.
+
+## Working with discovery
+
+Use `list_traders` or `GET /api/v1/traders` when a request depends on resolving a trader ID before stats or detail reads. Trader discovery rows include one `source` identity for the trader's platform, with `platform`, handle, display name, profile URL, avatar URL, and audience count when available.
+
+Each trader has one source platform. Use `sourcePlatforms` to filter discovery to `TELEGRAM`, `X`, or both, then read the returned row's `source.platform` before answering platform-specific questions.
 
 ## Working with messages
 
