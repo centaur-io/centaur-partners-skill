@@ -22,6 +22,7 @@ Use this skill when a user wants to access Centaur data directly from an agent, 
 - MCP endpoint: `https://partners.centaur.io/mcp`
 - Capability families: events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats
 - Discovery tools: `list_traders` and `list_assets`; `list_traders` can filter by `sourcePlatforms`
+- Message tools: `list_messages` can filter source messages by `sourcePlatforms`
 - REST uses `https://partners.centaur.io/api/v1/*`
 - Official Claude and ChatGPT installs use OAuth.
 - OAuth is available to active, email-verified signed-up users.
@@ -63,7 +64,7 @@ Each trader has one source platform. Use `sourcePlatforms` to filter trader disc
 
 Messages are the raw voice of each trader's source account or channel: thesis, macro thinking, sentiment, conviction, and context that cannot be derived from structured event or position data. When using `list_messages`, treat messages as a window into how traders think, not as a second source of trade data.
 
-`list_messages` supports direct source-message hydration with `ids` plus time bounds, limit, and cursor. It does not expose `traderId` on message rows and does not support trader, asset, direction, or event-type filters.
+`list_messages` supports source-platform filtering with `sourcePlatforms`, direct source-message hydration with `ids`, plus time bounds, limit, and cursor. For Telegram-only or X-only source-message requests, pass `sourcePlatforms` to the tool rather than fetching all platforms and filtering client-side. It does not expose `traderId` on message rows and does not support trader, asset, direction, or event-type filters.
 
 Source Message IDs are opaque. Use IDs returned by message `id` or event `messageId`; never synthesize IDs from Telegram channel/message components or X account/tweet components.
 

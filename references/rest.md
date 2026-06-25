@@ -20,6 +20,7 @@ x-api-key: $CENTAUR_API_KEY
 - `GET /api/v1/traders/stats` also accepts `sourcePlatforms` and returns one `source` identity per trader stats row.
 - Use `GET /api/v1/aggregate-summaries` for Generated Aggregate Narrative Summaries across eligible sources.
 - Use `GET /api/v1/channel-summaries` for compact Generated Channel Narrative Summaries.
+- Use `sourcePlatforms` on `GET /api/v1/messages` for Telegram-only or X-only source-message requests.
 - Use `ids` on `GET /api/v1/messages` to hydrate Source Message IDs referenced by event `messageId`.
 - Source Message IDs are opaque; do not construct them from Telegram or X platform IDs.
 - Message rows expose `source.identity` for account/channel metadata and `source.preview` for timestamp, URL, text, attachments, and platform flags.
