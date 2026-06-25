@@ -55,9 +55,9 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 
 ## Working with discovery
 
-Use `list_traders` or `GET /api/v1/traders` when a request depends on resolving a trader ID before stats or detail reads. Trader discovery rows include one `source` identity for the trader's platform, with `platform`, handle, display name, profile URL, avatar URL, and audience count when available.
+Use `list_traders` or `GET /api/v1/traders` when a request depends on resolving a trader ID before stats or detail reads. Trader discovery rows include one `source` identity for the trader's platform, with `platform`, handle, display name, profile URL, avatar URL, and audience count when available. Trader stats rows expose the same `source` shape.
 
-Each trader has one source platform. Use `sourcePlatforms` to filter discovery to `TELEGRAM`, `X`, or both, then read the returned row's `source.platform` before answering platform-specific questions.
+Each trader has one source platform. Use `sourcePlatforms` to filter trader discovery or trader stats to `TELEGRAM`, `X`, or both, then read the returned row's `source.platform` before answering platform-specific questions.
 
 ## Working with messages
 
