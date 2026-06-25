@@ -25,7 +25,7 @@ Use `list_traders` and `list_assets` as discovery tools when the user does not a
 
 Use `list_aggregate_summaries` for Generated Aggregate Narrative Summaries across eligible sources. Use `list_channel_summaries` for compact Generated Channel Narrative Summaries. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful.
 
-Use `list_messages` with `ids` to hydrate Source Message IDs referenced by event `messageId`. Source Message IDs are opaque; do not construct them from Telegram or X platform IDs. Message rows do not expose `traderId`, and message reads do not support trader, asset, direction, or event-type filters.
+Use `list_messages` with `ids` to hydrate Source Message IDs referenced by event `messageId`. Source Message IDs are opaque; do not construct them from Telegram or X platform IDs. Message rows expose `source.identity` for account/channel metadata and `source.preview` for timestamp, URL, text, attachments, and platform flags. Message rows do not expose `traderId`, and message reads do not support trader, asset, direction, or event-type filters.
 
 Use `list_positions` for historical position performance or to hydrate event `positionId` references. It accepts `positionIds` and returns `timeBasedPerformances` for `1D`, `7D`, and `30D`; each window exposes `status` and `returnPercentage` only.
 

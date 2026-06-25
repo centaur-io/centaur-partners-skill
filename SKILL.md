@@ -61,6 +61,8 @@ Messages are the raw voice of each trader's source account or channel: thesis, m
 
 Source Message IDs are opaque. Use IDs returned by message `id` or event `messageId`; never synthesize IDs from Telegram channel/message components or X account/tweet components.
 
+Message rows use a nested source payload. Read source account/channel metadata from `source.identity` and message display data from `source.preview`. Do not expect old flat `url`, `text`, `attachments`, or `originalCreatedAt` fields on the message row.
+
 For market-wide insight, prefer Generated Aggregate Narrative Summaries when `list_aggregate_summaries` is available. Use Generated Channel Narrative Summaries for Source Window-specific texture when `list_channel_summaries` is available. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful. Summaries are generated server-side and return concise market context without the full source material.
 
 ### Messages vs events
