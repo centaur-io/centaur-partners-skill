@@ -1,5 +1,12 @@
 # Curl Examples
 
+## Trader discovery with a minimum trade count
+
+```bash
+curl -s 'https://partners.centaur.io/api/v1/traders?sourcePlatforms=X&minTrades=5&startTime=2026-03-01T00:00:00.000Z&endTime=2026-03-31T23:59:59.999Z&limit=10' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
 ## Recent events
 
 ```bash

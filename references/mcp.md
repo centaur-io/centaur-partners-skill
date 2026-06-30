@@ -21,7 +21,7 @@ Use MCP when the client already has Centaur configured.
 - discovery
 - stats
 
-Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs. `list_traders` accepts `sourcePlatforms` and each trader row includes one `source` identity for the trader's platform. `list_trader_stats` also accepts `sourcePlatforms` and returns the same source shape per trader row.
+Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs. `list_traders` accepts `sourcePlatforms`, `minTrades`, `startTime`, and `endTime`, and each trader row includes `tradeCount` plus one `source` identity for the trader's platform. `minTrades` defaults to `3`; pass `minTrades=0` when the user needs the full visible trader directory. `startTime` and `endTime` scope `tradeCount` and `minTrades` by position open time. `list_trader_stats` also accepts `sourcePlatforms` and returns the same source shape per trader row.
 
 Use `list_aggregate_summaries` for Generated Aggregate Narrative Summaries across eligible sources. Use `list_channel_summaries` for compact Generated Channel Narrative Summaries. If summary tools return empty pages, there may be no generated summaries for the requested window; fall back to `list_messages` when useful.
 
@@ -36,6 +36,7 @@ For daily summary requests, interpret unqualified days as UTC days. Pass explici
 - Start with the narrowest matching read for the request.
 - If the request depends on knowing a trader or asset first, discover it directly with `list_traders` or `list_assets` before calling detail stats.
 - For platform-specific trader requests, filter `list_traders` or `list_trader_stats` with `sourcePlatforms` and read `source.platform` from the returned row.
+- For active-trader discovery requests, filter `list_traders` with `minTrades`; include `startTime` and `endTime` for bounded periods, and read `tradeCount` from the returned rows.
 - For platform-specific source-message requests, filter `list_messages` with `sourcePlatforms`.
 - Use explicit `limit` and entity filters when they matter.
 - Keep list reads paginated deliberately.

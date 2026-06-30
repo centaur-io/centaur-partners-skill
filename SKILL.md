@@ -21,7 +21,7 @@ Use this skill when a user wants to access Centaur data directly from an agent, 
 
 - MCP endpoint: `https://partners.centaur.io/mcp`
 - Capability families: events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats
-- Discovery tools: `list_traders` and `list_assets`; `list_traders` can filter by `sourcePlatforms`
+- Discovery tools: `list_traders` and `list_assets`; `list_traders` can filter by `sourcePlatforms`, `minTrades`, `startTime`, and `endTime`
 - Message tools: `list_messages` can filter source messages by `sourcePlatforms`
 - REST uses `https://partners.centaur.io/api/v1/*`
 - Official Claude and ChatGPT installs use OAuth.
@@ -56,7 +56,7 @@ Read [references/rest.md](references/rest.md) and [references/examples-curl.md](
 
 ## Working with discovery
 
-Use `list_traders` or `GET /api/v1/traders` when a request depends on resolving a trader ID before stats or detail reads. Trader discovery rows include one `source` identity for the trader's platform, with `platform`, handle, display name, profile URL, avatar URL, and audience count when available. Trader stats rows expose the same `source` shape.
+Use `list_traders` or `GET /api/v1/traders` when a request depends on resolving a trader ID before stats or detail reads. Trader discovery rows include `tradeCount` plus one `source` identity for the trader's platform, with `platform`, handle, display name, profile URL, avatar URL, and audience count when available. Use `minTrades` to require a minimum eligible visible position count; it defaults to `3`, and `minTrades=0` returns the full visible trader directory. Use `startTime` and `endTime` when the user asks for active traders in a bounded period; those bounds scope `tradeCount` and `minTrades` by position open time. Trader stats rows expose the same `source` shape.
 
 Each trader has one source platform. Use `sourcePlatforms` to filter trader discovery or trader stats to `TELEGRAM`, `X`, or both, then read the returned row's `source.platform` before answering platform-specific questions.
 

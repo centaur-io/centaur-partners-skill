@@ -16,7 +16,9 @@ x-api-key: $CENTAUR_API_KEY
 ## Query guidance
 
 - Use `GET /api/v1/traders` and `GET /api/v1/assets` for direct discovery when the right IDs are not known yet.
-- `GET /api/v1/traders` accepts `sourcePlatforms`, and each trader row includes one `source` identity for the trader's platform.
+- `GET /api/v1/traders` accepts `sourcePlatforms` and `minTrades`, and each trader row includes `tradeCount` plus one `source` identity for the trader's platform.
+- `minTrades` defaults to `3`; pass `minTrades=0` when the user needs the full visible trader directory.
+- `GET /api/v1/traders` also accepts `startTime` and `endTime` to scope `tradeCount` and `minTrades` by position open time.
 - `GET /api/v1/traders/stats` also accepts `sourcePlatforms` and returns one `source` identity per trader stats row.
 - Use `GET /api/v1/aggregate-summaries` for Generated Aggregate Narrative Summaries across eligible sources.
 - Use `GET /api/v1/channel-summaries` for compact Generated Channel Narrative Summaries.
