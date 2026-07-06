@@ -20,9 +20,10 @@ Use this skill when a user wants to access Centaur data directly from an agent, 
 ## Current surface
 
 - MCP endpoint: `https://partners.centaur.io/mcp`
-- Capability families: events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats
+- Capability families: events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries
 - Discovery tools: `list_traders` and `list_assets`; `list_traders` can filter by `sourcePlatforms`, `minTrades`, `startTime`, and `endTime`
 - Message tools: `list_messages` can filter source messages by `sourcePlatforms`
+- Aggregate tools: `rank_traders` ranks traders by activity or performance without trader IDs; `summarize_message_activity` returns deterministic message/event counts and trends
 - REST uses `https://partners.centaur.io/api/v1/*`
 - Official Claude and ChatGPT installs use OAuth.
 - OAuth is available to active, email-verified signed-up users.
@@ -144,12 +145,14 @@ Each event carries three boolean flags: `assumed`, `retrospective`, and `autoGen
 ### Choosing the right tool
 
 - Use `list_traders` or `list_assets` first when the user does not already know the right trader ID or asset ID.
+- Use `rank_traders` when the user asks who is most active or best performing — it ranks traders server-side by `event_count`, `position_count`, `win_rate`, `avg_return`, `median_return`, or `sharpe_ratio` over an explicit time window (default last 7 days) without requiring trader IDs. Do not page through raw events to build rankings. For performance metrics, qualify thin samples using the returned `timeBasedPerformance.positionsCount`.
+- Use `summarize_message_activity` when the user asks how much activity happened — message/event counts, volumes, or trends — grouped by trader or overall and bucketed by hour, day, or week. Its counts are deterministic evidence over raw data; it is not a generated narrative summary. Do not page through `list_messages` or `list_events` to count activity.
 - Use `list_events` when the user wants to see trade activity — what happened, in what order, with compact source-message references. Remember to skip assumed and auto-generated events by default.
 - Use `list_positions` when the user wants historical position performance or needs to hydrate event `positionId` references. It accepts `positionIds` and returns open and closed positions with `timeBasedPerformances` for `1D`, `7D`, and `30D`; each window exposes `status` and `returnPercentage` only.
 - Use `list_open_positions` when the user wants current exposure — what is held right now and how it is performing.
 - Use `list_trader_stats` when the user wants aggregate metrics — win rate, average time-based return, asset focus.
 - Use `list_asset_stats` when the user wants aggregate positioning metrics for one asset after discovery.
-- Do not use `list_events` to manually compute win rates or ROI by scanning close events. The stats and positions tools exist precisely for that.
+- Do not use `list_events` to manually compute win rates, ROI, rankings, or activity counts by scanning rows. The stats, positions, ranking, and activity-summary tools exist precisely for that.
 
 ## When blocked
 

@@ -51,6 +51,27 @@ curl -s 'https://partners.centaur.io/api/v1/positions?positionIds=9001,9002&limi
   -H "x-api-key: $CENTAUR_API_KEY"
 ```
 
+## Most active traders of the last 7 days
+
+```bash
+curl -s 'https://partners.centaur.io/api/v1/traders/rankings?metric=event_count&limit=10' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
+## Best 7D win rate over positions opened in a bounded window
+
+```bash
+curl -s 'https://partners.centaur.io/api/v1/traders/rankings?metric=win_rate&timeBasedPerformanceWindow=7D&startTime=2026-06-01T00:00:00.000Z&endTime=2026-07-01T00:00:00.000Z&limit=10' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
+## Daily message and event volume per trader
+
+```bash
+curl -s 'https://partners.centaur.io/api/v1/activity-summaries?groupBy=trader&interval=day&limit=10' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
 ## Forward pagination
 
 ```bash
