@@ -34,6 +34,7 @@ x-api-key: $CENTAUR_API_KEY
 - List reads use forward-only cursor pagination via `cursor`.
 - Stats reads return aggregate subject and summary data instead of list pages.
 - Use `GET /api/v1/traders/rankings` for trader ranking questions: `metric` (`event_count` default, `position_count`, `win_rate`, `avg_return`, `median_return`, `sharpe_ratio`), optional `assetIds`, `direction`, `timeBasedPerformanceWindow` (default `7D`), `minPositions` (default `3`), explicit UTC bounds (default last 7 days), and `limit` (default 10, max 50). Results are bounded with no cursor.
+- Performance-metric rankings evaluate positions opened in the window at the chosen horizon, so `startTime` must be at least the evaluation window before now; more recent windows return `422` (`PERFORMANCE_WINDOW_NOT_ELAPSED`) with a corrective message.
 - Use `GET /api/v1/activity-summaries` for deterministic message/event counts and trends: `groupBy` (`trader` default, `none`), `interval` (`hour`, `day` default, `week`), `eventTypes`, `traderIds`, explicit UTC bounds (default last 7 days), and `limit` (default 10, max 50). Requests above 168 buckets per group return `422`.
 - Do not page raw event or message lists to build rankings or counts; use the rankings and activity-summary reads instead.
 - Use the main Centaur docs site for the exact live endpoint, query, and response contract.
