@@ -2,31 +2,12 @@
 
 Centaur uses different auth patterns by surface.
 
-## Decision order
-
-1. Prefer MCP if the current client already has a Centaur MCP server configured.
-2. Otherwise check for `CENTAUR_API_KEY`.
-3. If the env var exists, use REST.
-4. Otherwise the user may paste a Centaur API key directly into the current chat for one-time use.
-5. If a pasted key is provided, use REST for the current session only and do not persist the key.
-6. If neither is available, stop and ask the user to configure Centaur rather than inventing credentials.
-
 ## Headers
 
-- Official Claude and ChatGPT installs: OAuth
+- Official Claude and ChatGPT installs: OAuth, available to active, email-verified signed-up users
 - REST: `x-api-key: <api-key>`
 
 ## Access shape
 
-- The same key format works across events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats.
-- MCP OAuth is available to active, email-verified signed-up users.
 - API keys are self-serve REST credentials and do not require manual approval.
-- Summary reads require normal summary read authorization and may return empty pages when no generated summaries match the requested window.
-- Individual reads can still be scope-gated by the server.
-- MCP connections created before the feed release lack the feed scope; a one-time disconnect and reconnect of the Centaur MCP server grants it. API keys are unaffected.
-
-## Notes
-
-- Do not try to drive an OAuth flow or Dynamic Client Registration from the skill itself. Either the client is already connected to the Centaur MCP server or the skill should use REST.
-- Do not log, echo, or persist a real API key in output unless the user explicitly asks for that behavior.
-- If the user pastes a key in chat, treat it as transient session input only.
+- One key format works across the whole read surface — the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries — though individual reads can still be scope-gated by the server.

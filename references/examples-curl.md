@@ -14,7 +14,7 @@ curl -s 'https://partners.centaur.io/api/v1/feed?since=<nextCursor>' \
   -H "x-api-key: $CENTAUR_API_KEY"
 ```
 
-Pass the newest `meta.nextCursor` as `since`. Returned groups are whole-group upserts — replace any previously seen group by its `id`, and keep the latest non-null `nextCursor` for the next poll.
+Pass the newest `meta.nextCursor` as `since`; returned groups are whole-group upserts, so replace previously seen groups by `id`.
 
 ## Trader discovery with a minimum trade count
 
@@ -44,7 +44,7 @@ curl -s 'https://partners.centaur.io/api/v1/messages?ids=<source-message-id>&lim
   -H "x-api-key: $CENTAUR_API_KEY"
 ```
 
-Use a Source Message ID returned by a message row `id` or event `messageId`. Do not construct one from platform source/message components.
+Use a Source Message ID returned by a message row `id` or event `messageId`.
 
 ## Generated Channel Narrative Summaries for a UTC day
 

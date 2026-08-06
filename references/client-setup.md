@@ -65,12 +65,6 @@ export CENTAUR_API_KEY='<api-key>'
 
 Then use the REST examples in [examples-curl.md](examples-curl.md).
 
-Once connected, the client can use Centaur across events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats.
-
 ## One-time chat key
 
-If the user does not want to set an environment variable yet, they may create a self-serve API key in Centaur and paste it directly into the current chat session for one-time REST use.
-
-- Treat the pasted key as transient session input only.
-- Do not echo it back in responses.
-- Do not store it in files, config, or shell history.
+If the user does not want to set an environment variable yet, they may create a self-serve API key in Centaur and paste it directly into the current chat session for one-time REST use. Treat the pasted key as transient session input: keep it out of responses, files, config, and shell history.
