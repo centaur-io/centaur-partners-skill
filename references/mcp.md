@@ -13,6 +13,7 @@ Use MCP when the client already has Centaur configured.
 
 ## Capability families
 
+- the feed
 - events
 - messages
 - Generated Aggregate Narrative Summaries
@@ -22,6 +23,10 @@ Use MCP when the client already has Centaur configured.
 - stats
 - trader rankings
 - activity summaries
+
+Use `list_feed` for activity-stream requests. It returns presentation-ready source-message groups ordered by message post time, each with the trader summary, source preview, and curated events carrying direction and embedded asset context — no hydration calls needed. `limit` counts groups (default `20`, max `100`); accepts `traderIds`, `assetIds`, `startTime`/`endTime` on message post time, and forward-only `cursor`. For polling, pass the newest `meta.nextCursor` as `since` (mutually exclusive with `cursor`): results are whole-group upserts keyed by group `id` — an older message that gains a late-recorded event returns again with all its current events, so replace, never append. Keep the latest non-null `nextCursor` between polls, including from empty polls. Feed rows are pre-curated; a remaining `assumed: true` event is a deliberately retained inferred event and safe to present.
+
+If `list_feed` is missing from the connected server's tool inventory or returns a missing-permission error, the connection predates the feed scope — ask the user to disconnect and reconnect the Centaur MCP server once, then retry.
 
 Use `list_traders` and `list_assets` as discovery tools when the user does not already know the right IDs. `list_traders` accepts `sourcePlatforms`, `minTrades`, `startTime`, and `endTime`, and each trader row includes `tradeCount` plus one `source` identity for the trader's platform. `minTrades` defaults to `3`; pass `minTrades=0` when the user needs the full visible trader directory. `startTime` and `endTime` scope `tradeCount` and `minTrades` by position open time. `list_trader_stats` also accepts `sourcePlatforms` and returns the same source shape per trader row.
 

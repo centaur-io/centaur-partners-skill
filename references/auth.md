@@ -23,6 +23,7 @@ Centaur uses different auth patterns by surface.
 - API keys are self-serve REST credentials and do not require manual approval.
 - Summary reads require normal summary read authorization and may return empty pages when no generated summaries match the requested window.
 - Individual reads can still be scope-gated by the server.
+- MCP connections created before the feed release lack the feed scope; a one-time disconnect and reconnect of the Centaur MCP server grants it. API keys are unaffected.
 
 ## Notes
 

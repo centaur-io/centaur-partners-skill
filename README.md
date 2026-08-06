@@ -12,7 +12,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 
 - Prefer Centaur MCP when the client already has Centaur configured.
 - Use REST when `CENTAUR_API_KEY` is available or when the user provides a one-time key in chat.
-- Help with the broader read-only trading data surface across events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats.
+- Help with the broader read-only trading data surface across the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, and stats.
 - Support direct trader and asset discovery before detail stats calls.
 - Generate correct curl commands for the matching `GET /api/v1/*` read family, not only events.
 - Guide Claude, ChatGPT, Cursor, and Codex setup for the remote Centaur MCP server.
@@ -27,6 +27,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - OAuth is available to active, email-verified signed-up users
 - API keys are self-serve REST credentials
 - Generated Aggregate Narrative Summaries and Generated Channel Narrative Summaries are standard read families
+- The feed (`GET /api/v1/feed`, `list_feed`) returns presentation-ready source-message groups with curated events; `since` polls for changes with whole-group upserts
 - Summary tools may return empty pages when no generated summaries match the requested window
 - Source Message IDs are opaque; hydrate only IDs returned by message rows or event `messageId`
 - Exact live request shapes and examples live in the product docs below

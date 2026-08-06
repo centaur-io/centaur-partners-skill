@@ -1,5 +1,21 @@
 # Curl Examples
 
+## Recent feed activity
+
+```bash
+curl -s 'https://partners.centaur.io/api/v1/feed?limit=20' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
+## Poll the feed for new activity
+
+```bash
+curl -s 'https://partners.centaur.io/api/v1/feed?since=<nextCursor>' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
+Pass the newest `meta.nextCursor` as `since`. Returned groups are whole-group upserts — replace any previously seen group by its `id`, and keep the latest non-null `nextCursor` for the next poll.
+
 ## Trader discovery with a minimum trade count
 
 ```bash

@@ -5,7 +5,7 @@ Use REST when MCP is not configured or the user asks for direct HTTP access and 
 ## Endpoint shape
 
 - Use the matching read family under `GET https://partners.centaur.io/api/v1/*`.
-- Common families include events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
+- Common families include the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
 
 ## Header
 
@@ -15,6 +15,7 @@ x-api-key: $CENTAUR_API_KEY
 
 ## Query guidance
 
+- Use `GET /api/v1/feed` for activity-stream requests: presentation-ready source-message groups with curated events, trader summary, and embedded asset context — one call per page, no hydration reads. `limit` counts groups (default `20`, max `100`); accepts `traderIds`, `assetIds`, `startTime`/`endTime` on message post time, `cursor` for scroll-back, and `since` for change polling (mutually exclusive with `cursor`; results are whole-group upserts keyed by group `id` — keep the latest non-null `nextCursor` between polls, including from empty polls).
 - Use `GET /api/v1/traders` and `GET /api/v1/assets` for direct discovery when the right IDs are not known yet.
 - `GET /api/v1/traders` accepts `sourcePlatforms` and `minTrades`, and each trader row includes `tradeCount` plus one `source` identity for the trader's platform.
 - `minTrades` defaults to `3`; pass `minTrades=0` when the user needs the full visible trader directory.
