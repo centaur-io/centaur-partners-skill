@@ -1,6 +1,6 @@
 ---
 name: centaur-api
-description: Use the Centaur API over MCP when it is already configured in Claude, ChatGPT, Cursor, Codex, or Claude Code; use REST with CENTAUR_API_KEY or a Centaur API key pasted into the current chat session to fetch and summarize read-only Centaur data or generate correct curl commands.
+description: Read-only Centaur trading data (partners.centaur.io) - the activity feed, traders, trade events, positions, source messages, and generated summaries. Use when fetching or summarizing Centaur data over a configured Centaur MCP server or via REST with a Centaur API key, when generating Centaur API curl commands, or when a client needs Centaur MCP setup.
 ---
 
 # Centaur API
