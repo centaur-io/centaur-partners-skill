@@ -31,7 +31,7 @@ x-api-key: $CENTAUR_API_KEY
 - Use explicit filters rather than broad fetches when possible.
 - Historical list reads use `startTime` and `endTime` when explicit bounds are needed.
 - Position history reads accept `positionIds` and return time-based performance for `1D`, `7D`, and `30D`.
-- For Generated Aggregate Narrative Summaries and Generated Channel Narrative Summaries, `startTime` and `endTime` select windows that overlap the requested interval. For "today" or other unqualified daily summary requests, use UTC day bounds and request `limit=50`; use up to `limit=200` for broader pages.
+- For Generated Aggregate Narrative Summaries and Generated Channel Narrative Summaries, `startTime` and `endTime` select windows that overlap the requested interval.
 - List reads use forward-only cursor pagination via `cursor`.
 - Stats reads return aggregate subject and summary data instead of list pages.
 - Use `GET /api/v1/traders/rankings` for trader ranking questions: `metric` (`event_count` default, `position_count`, `win_rate`, `avg_return`, `median_return`, `sharpe_ratio`), optional `assetIds`, `direction`, `timeBasedPerformanceWindow` (default `7D`), `minPositions` (default `3`), explicit UTC bounds (default last 7 days), and `limit` (default 10, max 50). Results are bounded with no cursor.

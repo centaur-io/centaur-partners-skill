@@ -40,6 +40,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - `references/rest.md`: REST behavior and query guidance
 - `references/examples-curl.md`: curl examples only
 - `references/client-setup.md`: Claude, ChatGPT, Cursor, and Codex setup
+- `references/message-digests.md`: weighting, filtering, and structuring message digests
 
 ## Product docs
 

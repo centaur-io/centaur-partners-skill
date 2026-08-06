@@ -42,8 +42,6 @@ Performance metrics evaluate positions opened in the window at the chosen horizo
 
 Use `summarize_message_activity` for message/event count, volume, and trend questions instead of paging `list_messages` or `list_events`. It accepts `groupBy` (`trader` default, `none`), `interval` (`hour`, `day` default, `week`), `eventTypes`, `traderIds`, `startTime`, `endTime` (default last 7 days), and `limit` (default 10, max 50). It returns per-group totals plus per-bucket `messageCount`/`eventCount`, and `meta.totalMessages`/`meta.totalEvents` across all groups. It is a deterministic count read, not a generated narrative summary. Window/interval combinations above 168 buckets per group are rejected; widen the interval or narrow the window and retry.
 
-For daily summary requests, interpret unqualified days as UTC days. Pass explicit `startTime` and `endTime` bounds such as `2026-05-09T00:00:00.000Z` through `2026-05-10T00:00:00.000Z`; aggregate and channel summary time filters select windows that overlap the requested interval. Use `limit=50` for normal daily digests, increase up to `limit=200` for broader pages, and paginate with `cursor` when needed.
-
 ## Use pattern
 
 - Start with the narrowest matching read for the request.

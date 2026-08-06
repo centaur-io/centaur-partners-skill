@@ -90,43 +90,9 @@ For market-wide insight, prefer Generated Aggregate Narrative Summaries when `li
 
 Trade execution details (what event happened, which position it belongs to, and how positions performed) belong to `list_events`, `list_positions`, and `list_open_positions`. Event rows expose `positionId` and `messageId`; use `list_positions` with `positionIds` when you need to hydrate referenced position details or time-based performance, and `list_messages` with `ids` when you need referenced source-message text. Do not use messages to reconstruct or re-explain trades. When summarizing messages, focus on the reasoning, narrative, and sentiment — the why and the worldview — not the what. If a user asks about specific trades, direct them to the events and positions tools instead.
 
-### Volume awareness
+### Digests
 
-Some traders post many times per day while others share one or two high-value updates. Without active management, high-frequency posters will dominate every summary.
-
-- When a trader has posted heavily in a given window, compress their activity into a short summary noting their overall theme and conviction rather than enumerating each message.
-- Avoid letting any single trader dominate the output. Prioritize diversity of voices — a summary should represent the breadth of thinking across the feed, not the depth of one trader's posting habit.
-- When a trader posts a sequence of repetitive messages on the same asset, collapse the sequence into one note covering the overall behavior and price range.
-
-### Identifying substance
-
-Not all messages carry equal weight. Traders share a wide range of content — macro views, market structure analysis, personal reflections, conviction calls, risk management thinking, humor — and not all of it ties directly to a trade.
-
-- Prioritize messages that contain original thinking: thesis, reasoning, invalidation levels, market structure reads, or shifts in conviction.
-- Deprioritize messages that are purely mechanical: automated position mirrors from bots (rigid templates with entry price, size, notional value), templated signal alerts (ticker + entry + TP + SL + leverage with no context), or one-word confirmations ("longed", "added").
-- The most valuable messages often explain why a trader changed their mind, sat out, or took an unexpected position — surface these.
-
-### Structuring digests
-
-When asked for a daily summary, channel recap, or "what happened yesterday":
-
-- Use Generated Aggregate Narrative Summaries first for market-wide daily summaries when `list_aggregate_summaries` is available.
-- Use Generated Channel Narrative Summaries when the user asks for channel-level/Source Window texture or when Generated Aggregate Narrative Summaries are unavailable.
-- Interpret "today" and other unqualified calendar-day requests as UTC days by default.
-- Pass explicit UTC day bounds as `startTime` and `endTime`, using the next UTC midnight as the exclusive end bound.
-- Request `limit=50` for daily digests; use up to `limit=200` and paginate with `cursor` when more summaries are needed.
-- Lead with the most consequential macro-level observations: major directional shifts, consensus vs contrarian positioning, notable changes in sentiment.
-- Group by theme or narrative rather than by trader — "thesis 1" or "thesis 2" rather than trader-by-trader recaps.
-- End with quick-hit individual calls only where they add information not covered by the thematic grouping.
-
-### Example
-
-Given a day where Nihilus posted 20 messages about RESOLV (all variations of "longed more", "keep buying", "dips are for buying"), RunnerXBT posted 2 messages with a detailed macro short thesis citing geopolitical catalysts, and 10 other traders posted 1–3 messages each:
-
-- Compress Nihilus into one line: "Nihilus was aggressively accumulating RESOLV all day, buying dips with high conviction and no stops mentioned."
-- Surface RunnerXBT's reasoning in full since it contains original macro thinking that other traders are not expressing.
-- Give each of the remaining traders space proportional to the substance of what they said, not their volume.
-- Do not restate trade execution details (entry prices, sizes, P&L) — point to `list_events` for that.
+Weight traders by the substance of what they said, not their message volume — compress high-frequency posters, surface original thinking, and group by theme rather than by trader. Before writing any digest, daily summary, or channel recap, read [references/message-digests.md](references/message-digests.md) for volume weighting, substance filtering, digest structure, and a worked example.
 
 ## Working with events
 
