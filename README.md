@@ -28,9 +28,28 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - API keys are self-serve REST credentials
 - Generated Aggregate Narrative Summaries and Generated Channel Narrative Summaries are standard read families
 - The feed (`GET /api/v1/feed`, `list_feed`) returns presentation-ready source-message groups with curated events; `since` polls for changes with whole-group upserts
-- Summary tools may return empty pages when no generated summaries match the requested window
+- Summary tools may return empty pages when no generated summaries match the requested window; an empty page is a valid result, not a failed read
+- Reads accept only explicit ISO-8601 `startTime`/`endTime` and never parse relative-time phrases
+- A page walk is complete only when the final page's `meta.hasMore` is `false`
+- Prices are expressed in the row's `quoteSymbol` and are `null` when unknown; US dollars are never assumed
+- Generated narrative summary reads are selected only on an explicit ask for insights or narrative analysis
 - Source Message IDs are opaque; hydrate only IDs returned by message rows or event `messageId`
 - Exact live request shapes and examples live in the product docs below
+
+## Behavior parity
+
+Grounding, relative-time semantics, generated-summary selection, pagination completion, and failure qualification in `SKILL.md` are aligned with the behavior the Partners API/MCP server states in its `centaur://partners-api/filter-guide` resource, and with the behavior the Centaur chat assistant enforces on the same data questions. The server resource is the live source of truth; this skill restates those rules so they also apply to REST callers and to hosts that do not read MCP resources.
+
+### Intentional differences
+
+These are deliberate, not drift:
+
+- **No injected time anchor.** The server resource and the chat assistant stamp the current server time into their instructions on every read or generation. A static skill document cannot, so it names the anchor to use instead: the timestamp carried by the `filter-guide` resource over MCP, or the current UTC time over REST.
+- **No `"recent"` default.** The chat assistant resolves an unqualified `"recent"` to a rolling 7 days. That is a product-surface UX default; a skill running in an arbitrary host should not invent a window the user did not ask for, so `"recent"` falls under the ambiguous-phrase rule and prompts a clarifying question.
+- **Quote-symbol presentation stops at the unit.** The chat assistant additionally formats USD-pegged quote symbols as dollars and others with a native currency symbol. That presentation layer is product-specific; the skill states only the underlying rule — price is in the row's `quoteSymbol`, never assume dollars, omit the unit when `quoteSymbol` is `null`.
+- **Both surfaces, one set of rules.** The `filter-guide` resource is MCP-only. The skill covers MCP and REST, so it states the shared rules once and notes where the two surfaces differ (the time anchor, the auth header).
+- **No documentation-search, page-context, or conversation-history guidance.** Those chat assistant rules depend on tools and UI state that no skill host is guaranteed to have, so the skill omits them rather than instructing against unavailable capabilities.
+- **Model and conversation are host-owned.** An MCP host picks its own model and owns its own history; Centaur neither selects the model nor observes the conversation. The skill therefore forbids claiming model identity unless the host explicitly reports it, and forbids claiming that Centaur remembers earlier turns.
 
 ## Repository layout
 

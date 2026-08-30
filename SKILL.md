@@ -28,6 +28,53 @@ If MCP is not configured or the user asks for REST, call the matching `GET /api/
 
 Read [references/rest.md](references/rest.md) for endpoint paths and query parameters, and [references/examples-curl.md](references/examples-curl.md) for copy-ready curl commands.
 
+## Answering with Centaur data
+
+These rules mirror the behavior the Centaur MCP server states in its `filter-guide` resource. They apply to every read family below, over MCP and REST alike.
+
+### Ground every claim in a read
+
+- Any claim about live or current Centaur data — positions, trades, messages, rankings, summaries, performance — must be grounded in a result returned by a Centaur read in this session.
+- Do not answer data questions from general or prior knowledge, memory, or assumptions about markets, traders, or assets. Call the matching read, or say the data is unavailable.
+- When an answer mixes read results with general knowledge or inference, label which parts came from a Centaur read and which did not.
+
+### Resolve relative time before calling
+
+Reads accept only explicit ISO-8601 `startTime` and `endTime`; none of them parse relative-time phrases such as "today" or "this week". Resolve the phrase to explicit UTC bounds yourself, anchored on the current server time. Over MCP, the `filter-guide` resource carries that timestamp on every resource read — use it as the anchor when the connected host surfaces resources. When it does not, and over REST, anchor on the current UTC time.
+
+- "last 24h" — the rolling 24 hours ending at the anchor.
+- "today" — the current UTC calendar day ending at the anchor.
+- "this week" — the current UTC calendar week, starting Monday `00:00:00Z`, ending at the anchor. This is a calendar week, not a rolling 7 days.
+- "last N days" — the rolling N days ending at the anchor.
+- State the resolved window in the answer so the user can see what range was queried.
+- If a phrase is ambiguous and these rules do not resolve it, ask one clarifying question instead of guessing a window.
+
+Omitting both bounds may apply a bounded default history window, and an explicit `startTime` earlier than the accessible range may be clamped forward. List responses echo the applied range in `meta.appliedTimeRange`, stats responses in `filtersApplied.appliedTimeRange`; when the applied range differs from the requested one, report the applied range.
+
+### Separate failures from empty results
+
+- If a read fails, times out, or is rejected, do not present any claim that depends on it as confirmed.
+- Never invent, estimate, or backfill data for a read that failed or returned no rows.
+- Distinguish the two cases when reporting. A failed, timed-out, or rejected read means the data could not be retrieved. A successful read with no rows means no matching data was found for the requested filters and window — that is a valid result, not an error.
+- A failed or partial read only qualifies the claims that depended on it. Claims backed by other successful reads in the same answer stand normally.
+
+### Finish or qualify page walks
+
+- List reads use forward-only cursor pagination. Pass `cursor` from `meta.nextCursor` to advance.
+- A page walk is complete only when the final page's `meta.hasMore` is `false`. Otherwise qualify the answer as partial, and never present partial pages as a complete ranking, count, or total.
+- Page walks are for itemized reads only. Ranking, count, and trend questions are served by `rank_traders`, `summarize_message_activity`, and the stats reads — never by paging `list_events` or `list_messages` rows to compute them.
+- Ordering is fixed per read; there is no client sort parameter.
+- Time-ordered reads (`list_feed`, `list_messages`, `list_events`, `list_positions`, `list_open_positions`, `list_channel_summaries`, `list_aggregate_summaries`) return newest rows first: canonical timestamp descending with `id` as the tiebreak.
+- Discovery reads (`list_traders`, `list_assets`) return rows alphabetically: case-insensitive name ascending with `id` as the tiebreak.
+- The aggregate reads order differently: `rank_traders` rows follow the requested metric descending, not timestamp, and `summarize_message_activity` buckets ascend by bucket start within each group.
+
+### Host-controlled behavior
+
+The connected client, not Centaur, owns the model and the conversation. Centaur neither selects the model nor observes conversation history.
+
+- Do not state which model is answering unless the host has explicitly reported it. Never infer model identity from the client name, the user agent, or the fact that Centaur is connected.
+- Do not claim that Centaur remembers earlier turns or persists context between sessions. Earlier turns are available only when the host supplies them.
+
 ## Working with discovery
 
 Use `list_traders` or `GET /api/v1/traders` when a request depends on resolving a trader ID before stats or detail reads. `minTrades` requires a minimum eligible visible position count and defaults to `3` — pass `minTrades=0` for the full visible trader directory. `startTime` and `endTime` scope `tradeCount` and `minTrades` by position open time for "active traders in a bounded period" requests.
@@ -43,6 +90,7 @@ The feed is the presentation-ready view of recent trading activity: source-messa
 - `limit` counts message groups (default `20`, max `100`). Scroll back with `cursor`.
 - Poll for new activity with `since` (mutually exclusive with `cursor`): pass the newest `meta.nextCursor`. Results are whole-group upserts — replace any previously seen group by its `id`, because a group returns with all of its current events, including when an older message gains a late-recorded event. Keep the latest non-null `nextCursor` between polls, including from empty polls.
 - Filters: `traderIds` and `assetIds`, plus `startTime`/`endTime` on message post time.
+- Feed event prices carry the same `quoteSymbol` unit rule as raw event rows — see [Working with events](#working-with-events).
 - Some sources may be editorially excluded from the feed while remaining visible on raw reads like `list_events`; this is expected, not missing data.
 - For flat event queries, counts, rankings, or system-event visibility, use `list_events` and the stats tools instead of the feed.
 
@@ -54,7 +102,13 @@ Messages are the raw voice of each trader's source account or channel: thesis, m
 
 Source Message IDs are opaque. Use only IDs returned by message `id` or event `messageId`; never synthesize IDs from Telegram channel/message components or X account/tweet components.
 
-For market-wide insight, prefer Generated Aggregate Narrative Summaries (`list_aggregate_summaries`); use Generated Channel Narrative Summaries (`list_channel_summaries`) for Source Window-specific texture. They return concise server-generated market context without the full source material. An empty page means no generated summaries for the requested window — fall back to `list_messages` when useful.
+Generated narrative summaries describe generated market narratives for their Source Window or Aggregate Window, returning concise server-generated market context without the full source material. Select them only when the user explicitly asks for insights, info, summaries, or similar generated narrative analysis: `list_aggregate_summaries` for cross-source market-wide narrative, `list_channel_summaries` for Source Window-specific texture.
+
+- They are not evidence for exact trade counts, public activity rankings, or current open-position skew. Use `rank_traders` for rankings, `summarize_message_activity` for counts and trends, and the event, message, position, open-position, and stats reads for other trade facts and positioning claims.
+- The word "summary" alone does not select a read: the narrative summary reads answer insight and narrative requests, while `summarize_message_activity` answers count, volume, and trend requests.
+- If only generated narrative summaries are available, answer in narrative terms and avoid count, ranking, or current-positioning language.
+- Both default to safe summaries; pass `includeLowSignal=true` to include low-signal windows.
+- An empty page means no generated summaries for the requested window, not a failed read — fall back to `list_messages` when useful.
 
 ### Messages vs events
 
@@ -67,6 +121,8 @@ Weight traders by the substance of what they said, not their message volume — 
 ## Working with events
 
 Events are the structured record of trade activity — opens, closes, increases, and decreases with prices, position references, source-message references, and trader attribution.
+
+Prices on event, feed, position, and open-position rows are expressed in the row's `quoteSymbol` (for example `USDT`, `USDC`, `CAD`), the quote currency of the asset's preferred market — never assume US dollars. `quoteSymbol` is `null` when unknown; omit the unit rather than guessing one.
 
 ### Filtering out system events
 
@@ -91,8 +147,6 @@ Surface hidden events only on an explicit ask: if the user asks for assumed clos
 - `list_open_positions` — current exposure: what is held right now and how it is performing.
 - `list_trader_stats` — aggregate per-trader metrics: win rate, average time-based return, asset focus.
 - `list_asset_stats` — aggregate positioning metrics for one asset after discovery.
-
-Ranking, count, and trend questions are served by `rank_traders`, `summarize_message_activity`, and the stats tools — never by paging `list_events` or `list_messages` rows to compute them.
 
 ## References
 
