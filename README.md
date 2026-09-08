@@ -44,7 +44,7 @@ Grounding, relative-time semantics, generated-summary selection, pagination comp
 
 These are deliberate, not drift:
 
-- **No injected time anchor.** The server resource and the chat assistant stamp the current server time into their instructions on every read or generation. A static skill document cannot, so it names the anchor to use instead: the timestamp carried by the `filter-guide` resource over MCP, or the current UTC time over REST.
+- **No injected time anchor.** The server resource and the chat assistant stamp the current server time into their instructions on every read or generation. A static skill document cannot, so it names the host's own current UTC clock as the anchor, with the `filter-guide` server timestamp as a fallback over MCP (it may be stale because hosts cache resources) and the current UTC time over REST.
 - **No `"recent"` default.** The chat assistant resolves an unqualified `"recent"` to a rolling 7 days. That is a product-surface UX default; a skill running in an arbitrary host should not invent a window the user did not ask for, so `"recent"` falls under the ambiguous-phrase rule and prompts a clarifying question.
 - **Quote-symbol presentation stops at the unit.** The chat assistant additionally formats USD-pegged quote symbols as dollars and others with a native currency symbol. That presentation layer is product-specific; the skill states only the underlying rule — price is in the row's `quoteSymbol`, never assume dollars, omit the unit when `quoteSymbol` is `null`.
 - **Both surfaces, one set of rules.** The `filter-guide` resource is MCP-only. The skill covers MCP and REST, so it states the shared rules once and notes where the two surfaces differ (the time anchor, the auth header).

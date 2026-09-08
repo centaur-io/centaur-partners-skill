@@ -27,5 +27,5 @@ Per-tool arguments, defaults, and limits for the Centaur MCP server.
 
 The server exposes its own guidance as MCP resources. Read them when the connected host surfaces resources; they are the live source of truth for behavior:
 
-- `centaur://partners-api/filter-guide` — grounding, failure handling, history and relative-time resolution, pagination, and per-tool visibility rules. It carries the current server time on every read; use that timestamp as the anchor when resolving relative-time phrases.
+- `centaur://partners-api/filter-guide` — grounding, failure handling, history and relative-time resolution, pagination, and per-tool visibility rules. It carries a fallback server timestamp taken at read time; prefer your own current UTC time and use the fallback only when you have no clock, re-reading the resource if the read is not recent.
 - `centaur://partners-api/capabilities` — the server tool inventory, the read scope each tool requires, and connection and auth details. It is the same static text for every caller, not a per-key entitlement list.
