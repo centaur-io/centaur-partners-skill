@@ -40,7 +40,7 @@ These rules mirror the behavior the Centaur MCP server states in its `filter-gui
 
 ### Resolve relative time before calling
 
-Reads accept only explicit ISO-8601 `startTime` and `endTime`; none of them parse relative-time phrases such as "today" or "this week". Resolve the phrase to explicit UTC bounds yourself. Anchor on your own current UTC time when the host provides it. Over MCP, the `filter-guide` resource also carries a fallback server timestamp taken at the moment of the resource read — hosts often cache resources for a whole session, so use it only when you have no clock of your own, and re-read the resource first if the read is not recent. Over REST, anchor on the current UTC time.
+Reads accept only explicit ISO-8601 `startTime` and `endTime`; none of them parse relative-time phrases such as "today" or "this week". Resolve the phrase to explicit UTC bounds yourself. Anchor on `meta.serverTime` from your most recent Centaur response in this session: every list and stats response, over MCP and REST alike, carries the server's current UTC time when it was produced. Before the first response, anchor on your own current UTC clock when the host provides one. Never anchor on the time of an MCP resource read; hosts cache resources for a whole session, so the `filter-guide` resource carries no timestamp.
 
 - "last 24h" — the rolling 24 hours ending at the anchor.
 - "today" — the current UTC calendar day ending at the anchor.
