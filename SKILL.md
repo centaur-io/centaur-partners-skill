@@ -5,7 +5,7 @@ description: Read-only Centaur trading data (partners.centaur.io) - the activity
 
 # Centaur API
 
-Read-only Centaur trading data over MCP (`https://partners.centaur.io/mcp`) or REST (`GET https://partners.centaur.io/api/v1/*` and the v2 trader reads). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
+Read-only Centaur trading data over MCP (`https://partners.centaur.io/mcp`) or REST (`GET https://partners.centaur.io/api/v2/*`). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
 
 ## Choosing access
 
@@ -87,7 +87,7 @@ Legacy `list_traders` and `/api/v1/traders` keep their original `tradeCount`, `m
 
 ## Working with the feed
 
-The feed is the presentation-ready view of recent trading activity: source-message groups ordered by message post time, each carrying the trader summary, the source-message preview, and curated trade events with embedded asset context and direction. Use `list_feed` or `GET /api/v1/feed` when the user asks what is happening, wants an activity stream, or wants to follow new activity over time — one feed call replaces composing events, messages, traders, assets, and positions.
+The feed is the presentation-ready view of recent trading activity: source-message groups ordered by message post time, each carrying the trader summary, the source-message preview, and curated trade events with embedded asset context and direction. Use `list_feed` or `GET /api/v2/feed` when the user asks what is happening, wants an activity stream, or wants to follow new activity over time — one feed call replaces composing events, messages, traders, assets, and positions.
 
 - Feed rows are curated server-side: fabricated system events (assumed closes, garbage-collected closes, and bookkeeping or duplicate-story assumed opens) are already removed. Do not re-apply the event-flag filtering rules from the events section below; present feed groups as returned.
 - A feed event with `assumed: true` is a deliberately retained inferred event (for example an inferred open). It is safe to present; do not mention the flag unless the user asks.
