@@ -13,13 +13,13 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - Prefer Centaur MCP when the client already has Centaur configured.
 - Use REST when `CENTAUR_API_KEY` is available or when the user provides a one-time key in chat.
 - Help with the broader read-only trading data surface across the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
-- Support direct trader and asset discovery before detail stats calls.
-- Generate correct curl commands for the matching `GET /api/v1/*` read family, not only events.
+- Separate trader identity lookup from position-count selection; select trader messages independently of signal visibility.
+- Generate correct curl commands for the matching versioned GET read family.
 - Guide Claude, ChatGPT, Cursor, and Codex setup for the remote Centaur MCP server.
 
 ## Current contract at a glance
 
-- REST surface: `https://partners.centaur.io/api/v1/*`
+- REST: v2 trader directory/activity reads; other reads remain under `https://partners.centaur.io/api/v1/*`
 - MCP endpoint: `https://partners.centaur.io/mcp`
 - Time-bounded reads use `startTime` and `endTime`
 - List-style reads use forward-only cursor pagination
@@ -47,3 +47,5 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - Docs: [partners.centaur.io/docs](https://partners.centaur.io/docs)
 - MCP endpoint: [partners.centaur.io/mcp](https://partners.centaur.io/mcp)
 - OpenAPI: [partners.centaur.io/api/v1/openapi.json](https://partners.centaur.io/api/v1/openapi.json)
+
+Publish this skill update after the new API endpoints and MCP tools are deployed. Legacy trader reads remain available during migration.

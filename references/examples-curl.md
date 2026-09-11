@@ -16,10 +16,10 @@ curl -s 'https://partners.centaur.io/api/v1/feed?since=<nextCursor>' \
 
 Pass the newest `meta.nextCursor` as `since`; returned groups are whole-group upserts, so replace previously seen groups by `id`.
 
-## Trader discovery with a minimum trade count
+## Trader activity with a minimum position count
 
 ```bash
-curl -s 'https://partners.centaur.io/api/v1/traders?sourcePlatforms=X&minTrades=5&startTime=2026-03-01T00:00:00.000Z&endTime=2026-03-31T23:59:59.999Z&limit=10' \
+curl -s 'https://partners.centaur.io/api/v2/traders/activity?sourcePlatforms=X&minPositionCount=5&startTime=2026-03-01T00:00:00.000Z&endTime=2026-03-31T23:59:59.999Z&limit=10' \
   -H "x-api-key: $CENTAUR_API_KEY"
 ```
 
@@ -94,3 +94,15 @@ curl -s 'https://partners.centaur.io/api/v1/activity-summaries?groupBy=trader&in
 curl -s 'https://partners.centaur.io/api/v1/events?limit=25&cursor=<nextCursor>' \
   -H "x-api-key: $CENTAUR_API_KEY"
 ```
+
+## Resolve a trader and read its messages
+
+```bash
+curl -s 'https://partners.centaur.io/api/v2/traders?search=greekslivenews2&limit=10' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+
+curl -s 'https://partners.centaur.io/api/v1/messages?traderIds=<returned-trader-id>&limit=20' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
+Use the selected directory result's `id`. Message access requires its own scope and visibility.
