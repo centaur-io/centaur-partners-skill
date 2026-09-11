@@ -5,7 +5,7 @@ description: Read-only Centaur trading data (partners.centaur.io) - the activity
 
 # Centaur API
 
-Read-only Centaur trading data over MCP (`https://partners.centaur.io/mcp`) or REST (`GET https://partners.centaur.io/api/v1/*`). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
+Read-only Centaur trading data over MCP (`https://partners.centaur.io/mcp`) or REST (`GET https://partners.centaur.io/api/v1/*` and the v2 trader reads). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
 
 ## Choosing access
 
@@ -24,7 +24,7 @@ Read [references/mcp.md](references/mcp.md) for per-tool arguments, defaults, an
 
 ## Use REST for direct HTTP access
 
-If MCP is not configured or the user asks for REST, call the matching `GET /api/v1/*` read family with `x-api-key: $CENTAUR_API_KEY` (or the pasted session key) on every request.
+If MCP is not configured or the user asks for REST, call the matching GET read family with `x-api-key: $CENTAUR_API_KEY` (or the pasted session key) on every request.
 
 Read [references/rest.md](references/rest.md) for endpoint paths and query parameters, and [references/examples-curl.md](references/examples-curl.md) for copy-ready curl commands.
 
@@ -65,7 +65,7 @@ Omitting both bounds may apply a bounded default history window, and an explicit
 - Page walks are for itemized reads only. Ranking, count, and trend questions are served by `rank_traders`, `summarize_message_activity`, and the stats reads — never by paging `list_events` or `list_messages` rows to compute them.
 - Ordering is fixed per read; there is no client sort parameter.
 - Time-ordered reads (`list_feed`, `list_messages`, `list_events`, `list_positions`, `list_open_positions`, `list_channel_summaries`, `list_aggregate_summaries`) return newest rows first: canonical timestamp descending with `id` as the tiebreak.
-- Discovery reads (`list_traders`, `list_assets`) return rows alphabetically: case-insensitive name ascending with `id` as the tiebreak.
+- Discovery reads (`list_trader_directory`, `list_trader_activity`, legacy `list_traders`, `list_assets`) return rows alphabetically: case-insensitive name ascending with `id` as the tiebreak.
 - The aggregate reads order differently: `rank_traders` rows follow the requested metric descending, not timestamp, and `summarize_message_activity` buckets ascend by bucket start within each group.
 
 ### Host-controlled behavior
@@ -77,9 +77,13 @@ The connected client, not Centaur, owns the model and the conversation. Centaur 
 
 ## Working with discovery
 
-Use `list_traders` or `GET /api/v1/traders` when a request depends on resolving a trader ID before stats or detail reads. `minTrades` requires a minimum eligible visible position count and defaults to `3` — pass `minTrades=0` for the full visible trader directory. `startTime` and `endTime` scope `tradeCount` and `minTrades` by position open time for "active traders in a bounded period" requests.
+Use `list_trader_directory` or `GET /api/v2/traders` to resolve trader names, slugs, source handles, or profile URLs to IDs. Select the matching candidate before reading messages or stats; ask if multiple candidates remain ambiguous. The directory requires `directory.read` and permitted message OR signal visibility. It has no trading measurements or filters and requires no positions or messages. Both-hidden identities remain hidden, including summary-only references.
 
-Each trader has one source platform. Filter trader discovery or trader stats with `sourcePlatforms` (`TELEGRAM`, `X`), then read the returned row's `source.platform` before answering platform-specific questions.
+Each trader has at most one assigned source, either a Telegram channel or an X account. Unassigned traders return `source: null`. Use `sourcePlatforms` to narrow the directory when the request names a platform. Directory presence does not promise content access or available messages.
+
+Use `list_trader_activity` or `GET /api/v2/traders/activity` for position-count selection. It requires `stats.read` and signal visibility. `minPositionCount` defaults to `3`; `0` includes zero-position traders, although an asset filter still requires a matching eligible position. Optional inclusive `startTime`/`endTime` bounds scope counts by position open time; omitted bounds are unbounded. Results contain `traderId` and `positionCount`, with alphabetical cursor pagination. Hydrate identities through the directory when names matter. Use stats for performance and rankings for top-N questions.
+
+Legacy `list_traders` and `/api/v1/traders` keep their original `tradeCount`, `minTrades=3`, signal visibility, and `directory.read` contract. Confirm the new tools are available before using them. If unavailable, explain the limitation; lowering the legacy threshold cannot reveal message-only identities. A directory-only client needs a separate stats grant before migrating analytical queries.
 
 ## Working with the feed
 
@@ -98,7 +102,7 @@ The feed is the presentation-ready view of recent trading activity: source-messa
 
 Messages are the raw voice of each trader's source account or channel: thesis, macro thinking, sentiment, conviction, and context that cannot be derived from structured event or position data. Treat messages as a window into how traders think, not as a second source of trade data.
 
-`list_messages` supports `sourcePlatforms` filtering — pass it for Telegram-only or X-only requests rather than filtering client-side — plus direct hydration with `ids`, time bounds, limit, and cursor. Message rows carry a nested source payload (`source.identity` for account/channel metadata, `source.preview` for display data) and expose no `traderId`; message reads have no trader, asset, direction, or event-type filters.
+`list_messages` supports `traderIds` and `sourcePlatforms` filtering — pass it for Telegram-only or X-only requests rather than filtering client-side — plus direct hydration with `ids`, time bounds, limit, and cursor. Message rows carry a nested source payload (`source.identity` for account/channel metadata, `source.preview` for display data) and `traderId`. Resolve names or source handles through the trader directory, then pass `traderIds` to select messages from their assigned source. Message visibility is independent of signal visibility. Asset, direction, and event-type filters remain unsupported.
 
 Source Message IDs are opaque. Use only IDs returned by message `id` or event `messageId`; never synthesize IDs from Telegram channel/message components or X account/tweet components.
 
@@ -139,7 +143,7 @@ Surface hidden events only on an explicit ask: if the user asks for assumed clos
 ### Choosing the right tool
 
 - `list_feed` — activity-stream requests: message-grouped, presentation-ready, system events already removed. Prefer it over composing `list_events` + `list_messages` + discovery calls.
-- `list_traders` / `list_assets` — first, when the right trader or asset ID is not known yet.
+- `list_trader_directory` / `list_assets` — first, when the right trader or asset ID is not known yet.
 - `rank_traders` — "most active" or "best performing" questions: ranks traders server-side by `event_count`, `position_count`, `win_rate`, `avg_return`, `median_return`, or `sharpe_ratio` without requiring trader IDs. The sample defaults to UTC year-to-date and the performance evaluation window defaults to `30D`. For performance metrics, qualify thin samples using the returned scored-versus-sampled coverage. Invalid combinations return retry alternatives; choose one explicitly and disclose any retry.
 - `summarize_message_activity` — "how much activity happened" questions: deterministic message/event counts, volumes, and trends, grouped by trader or overall and bucketed by hour, day, or week. It is a count read over raw data, not a generated narrative summary.
 - `list_events` — trade activity in order, with compact source-message references; skip assumed and auto-generated events by default.
