@@ -1,11 +1,11 @@
 ---
 name: centaur-api
-description: Read-only Centaur trading data (partners.centaur.io) - the activity feed, traders, trade events, positions, source messages, and generated summaries. Use when fetching or summarizing Centaur data over a configured Centaur MCP server or via REST with a Centaur API key, when generating Centaur API curl commands, or when a client needs Centaur MCP setup.
+description: Read-only Centaur trading data (api.centaur.io, mcp.centaur.io) - the activity feed, traders, trade events, positions, source messages, and generated summaries. Use when fetching or summarizing Centaur data over a configured Centaur MCP server or via REST with a Centaur API key, when generating Centaur API curl commands, or when a client needs Centaur MCP setup.
 ---
 
 # Centaur API
 
-Read-only Centaur trading data over MCP (`https://partners.centaur.io/mcp`) or REST (`GET https://partners.centaur.io/api/v2/*`). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
+Read-only Centaur trading data over MCP (`https://mcp.centaur.io/mcp`) or REST (`GET https://api.centaur.io/v2/*`). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
 
 ## Choosing access
 
@@ -77,17 +77,17 @@ The connected client, not Centaur, owns the model and the conversation. Centaur 
 
 ## Working with discovery
 
-Use `list_trader_directory` or `GET /api/v2/traders` to resolve trader names, slugs, source handles, or profile URLs to IDs. Select the matching candidate before reading messages or stats; ask if multiple candidates remain ambiguous. The directory requires `directory.read` and permitted message OR signal visibility. It has no trading measurements or filters and requires no positions or messages. Both-hidden identities remain hidden, including summary-only references.
+Use `list_trader_directory` or `GET /v2/traders` to resolve trader names, slugs, source handles, or profile URLs to IDs. Select the matching candidate before reading messages or stats; ask if multiple candidates remain ambiguous. The directory requires `directory.read` and permitted message OR signal visibility. It has no trading measurements or filters and requires no positions or messages. Both-hidden identities remain hidden, including summary-only references.
 
 Each trader has at most one assigned source, either a Telegram channel or an X account. Unassigned traders return `source: null`. Use `sourcePlatforms` to narrow the directory when the request names a platform. Directory presence does not promise content access or available messages.
 
-Use `list_trader_activity` or `GET /api/v2/traders/activity` for position-count selection. It requires `stats.read` and signal visibility. `minPositionCount` defaults to `3`; `0` includes zero-position traders, although an asset filter still requires a matching eligible position. Optional inclusive `startTime`/`endTime` bounds scope counts by position open time; omitted bounds are unbounded. Results contain `traderId` and `positionCount`, with alphabetical cursor pagination. Hydrate identities through the directory when names matter. Use stats for performance and rankings for top-N questions.
+Use `list_trader_activity` or `GET /v2/traders/activity` for position-count selection. It requires `stats.read` and signal visibility. `minPositionCount` defaults to `3`; `0` includes zero-position traders, although an asset filter still requires a matching eligible position. Optional inclusive `startTime`/`endTime` bounds scope counts by position open time; omitted bounds are unbounded. Results contain `traderId` and `positionCount`, with alphabetical cursor pagination. Hydrate identities through the directory when names matter. Use stats for performance and rankings for top-N questions.
 
-Legacy `list_traders` and `/api/v1/traders` keep their original `tradeCount`, `minTrades=3`, signal visibility, and `directory.read` contract. Confirm the new tools are available before using them. If unavailable, explain the limitation; lowering the legacy threshold cannot reveal message-only identities. A directory-only client needs a separate stats grant before migrating analytical queries.
+Legacy `list_traders` and `/v1/traders` keep their original `tradeCount`, `minTrades=3`, signal visibility, and `directory.read` contract. Confirm the new tools are available before using them. If unavailable, explain the limitation; lowering the legacy threshold cannot reveal message-only identities. A directory-only client needs a separate stats grant before migrating analytical queries.
 
 ## Working with the feed
 
-The feed is the presentation-ready view of recent trading activity: source-message groups ordered by message post time, each carrying the trader summary, the source-message preview, and curated trade events with embedded asset context and direction. Use `list_feed` or `GET /api/v2/feed` when the user asks what is happening, wants an activity stream, or wants to follow new activity over time — one feed call replaces composing events, messages, traders, assets, and positions.
+The feed is the presentation-ready view of recent trading activity: source-message groups ordered by message post time, each carrying the trader summary, the source-message preview, and curated trade events with embedded asset context and direction. Use `list_feed` or `GET /v2/feed` when the user asks what is happening, wants an activity stream, or wants to follow new activity over time — one feed call replaces composing events, messages, traders, assets, and positions.
 
 - Feed rows are curated server-side: fabricated system events (assumed closes, garbage-collected closes, and bookkeeping or duplicate-story assumed opens) are already removed. Do not re-apply the event-flag filtering rules from the events section below; present feed groups as returned.
 - A feed event with `assumed: true` is a deliberately retained inferred event (for example an inferred open). It is safe to present; do not mention the flag unless the user asks.

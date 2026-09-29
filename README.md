@@ -19,15 +19,16 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 
 ## Current contract at a glance
 
-- REST: all read families use `https://partners.centaur.io/api/v2/*`; existing v1 clients can migrate incrementally
-- MCP endpoint: `https://partners.centaur.io/mcp`
+- REST: all read families use `https://api.centaur.io/v2/*`; existing v1 clients can migrate incrementally
+- MCP endpoint: `https://mcp.centaur.io/mcp`
+- The old host `partners.centaur.io` keeps serving during a one-month dual-host window; after that REST paths redirect to the new host and the old MCP endpoint returns 410.
 - Time-bounded reads use `startTime` and `endTime`
 - List-style reads use forward-only cursor pagination
 - Official Claude and ChatGPT installs use OAuth
 - OAuth is available to active, email-verified signed-up users
 - API keys are self-serve REST credentials
 - Generated Aggregate Narrative Summaries and Generated Channel Narrative Summaries are standard read families
-- The feed (`GET /api/v2/feed`, `list_feed`) returns presentation-ready source-message groups with curated events; `since` polls for changes with whole-group upserts
+- The feed (`GET /v2/feed`, `list_feed`) returns presentation-ready source-message groups with curated events; `since` polls for changes with whole-group upserts
 - Summary tools may return empty pages when no generated summaries match the requested window; an empty page is a valid result, not a failed read
 - Reads accept only explicit ISO-8601 `startTime`/`endTime` and never parse relative-time phrases
 - A page walk is complete only when the final page's `meta.hasMore` is `false`
@@ -63,8 +64,8 @@ These are deliberate, not drift:
 
 ## Product docs
 
-- Docs: [partners.centaur.io/docs](https://partners.centaur.io/docs)
-- MCP endpoint: [partners.centaur.io/mcp](https://partners.centaur.io/mcp)
-- OpenAPI: [partners.centaur.io/api/v2/openapi.json](https://partners.centaur.io/api/v2/openapi.json)
+- Docs: [docs.centaur.io](https://docs.centaur.io)
+- MCP endpoint: [mcp.centaur.io/mcp](https://mcp.centaur.io/mcp)
+- OpenAPI: [api.centaur.io/v2/openapi.json](https://api.centaur.io/v2/openapi.json)
 
 Publish this skill update after the new API endpoints and MCP tools are deployed. Legacy trader reads remain available during migration.

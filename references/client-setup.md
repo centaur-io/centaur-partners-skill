@@ -5,7 +5,7 @@ Use MCP first whenever possible.
 Preferred MCP server URL:
 
 ```text
-https://partners.centaur.io/mcp
+https://mcp.centaur.io/mcp
 ```
 
 Official Claude and ChatGPT installs use OAuth for active, email-verified signed-up users. For custom clients, register the plain URL and complete the Centaur browser sign-in flow when prompted.
@@ -15,7 +15,7 @@ Official Claude and ChatGPT installs use OAuth for active, email-verified signed
 Preferred:
 
 ```text
-https://partners.centaur.io/mcp
+https://mcp.centaur.io/mcp
 ```
 
 Use the official ChatGPT App listing when available. For Developer Mode or custom setup, add the plain MCP URL and complete the Centaur browser sign-in flow.
@@ -23,7 +23,7 @@ Use the official ChatGPT App listing when available. For Developer Mode or custo
 ## Claude Code
 
 ```bash
-claude mcp add --transport http centaur https://partners.centaur.io/mcp
+claude mcp add --transport http centaur https://mcp.centaur.io/mcp
 ```
 
 ## Cursor
@@ -34,7 +34,7 @@ Add this to `~/.cursor/mcp.json`:
 {
   "mcpServers": {
     "centaur": {
-      "url": "https://partners.centaur.io/mcp"
+      "url": "https://mcp.centaur.io/mcp"
     }
   }
 }
@@ -43,14 +43,14 @@ Add this to `~/.cursor/mcp.json`:
 ## Codex
 
 ```bash
-codex mcp add centaur --url https://partners.centaur.io/mcp
+codex mcp add centaur --url https://mcp.centaur.io/mcp
 ```
 
 Optional persistent config:
 
 ```toml
 [mcp_servers.centaur]
-url = "https://partners.centaur.io/mcp"
+url = "https://mcp.centaur.io/mcp"
 ```
 
 For interactive Codex clients, prefer the plain MCP URL and let Codex dynamically register the OAuth client when prompted. Some OpenAI API-side MCP integrations may still require the application to supply an access token directly.
