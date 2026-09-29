@@ -4,7 +4,7 @@ Per-tool arguments, defaults, and limits for the Centaur MCP server.
 
 ## Endpoint
 
-- `https://partners.centaur.io/mcp`
+- `https://mcp.centaur.io/mcp`
 - Official Claude and ChatGPT installs authenticate with OAuth (see [auth.md](auth.md)).
 
 ## Tools
