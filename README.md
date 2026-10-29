@@ -21,7 +21,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 
 - REST: all read families use `https://api.centaur.io/v2/*`; existing v1 clients can migrate incrementally
 - MCP endpoint: `https://mcp.centaur.io/mcp`
-- The old host `partners.centaur.io` keeps serving during a one-month dual-host window; after that REST paths redirect to the new host and the old MCP endpoint returns 410.
+- The old host `partners.centaur.io` was removed on 29 October 2026. It no longer serves requests or redirects. Use the canonical REST and MCP endpoints above.
 - Time-bounded reads use `startTime` and `endTime`
 - List-style reads use forward-only cursor pagination
 - Official Claude and ChatGPT installs use OAuth
