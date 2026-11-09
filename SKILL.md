@@ -5,7 +5,7 @@ description: Read-only Centaur trading data (api.centaur.io, mcp.centaur.io) - t
 
 # Centaur API
 
-Read-only Centaur trading data over MCP (`https://mcp.centaur.io/mcp`) or REST (`GET https://api.centaur.io/v2/*`). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
+Read-only Centaur trading data over MCP (`https://mcp.centaur.io/mcp`) or REST (`https://api.centaur.io/v2/*`). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
 
 ## Choosing access
 
@@ -24,7 +24,7 @@ Read [references/mcp.md](references/mcp.md) for per-tool arguments, defaults, an
 
 ## Use REST for direct HTTP access
 
-If MCP is not configured or the user asks for REST, call the matching GET read family with `x-api-key: $CENTAUR_API_KEY` (or the pasted session key) on every request.
+If MCP is not configured or the user asks for REST, call the matching read family with `x-api-key: $CENTAUR_API_KEY` (or the pasted session key) on every request. Existing list reads use GET; a deployed complete-position query uses POST with a JSON body.
 
 Read [references/rest.md](references/rest.md) for endpoint paths and query parameters, and [references/examples-curl.md](references/examples-curl.md) for copy-ready curl commands.
 
@@ -40,7 +40,7 @@ These rules mirror the behavior the Centaur MCP server states in its `filter-gui
 
 ### Resolve relative time before calling
 
-Reads accept only explicit ISO-8601 `startTime` and `endTime`; none of them parse relative-time phrases such as "today" or "this week". Resolve the phrase to explicit UTC bounds yourself. Anchor on `meta.serverTime` from your most recent Centaur response in this session: every list and stats response, over MCP and REST alike, carries the server's current UTC time when it was produced. Before the first response, anchor on your own current UTC clock when the host provides one. Never anchor on the time of an MCP resource read; hosts cache resources for a whole session, so the `filter-guide` resource carries no timestamp.
+Legacy reads accept explicit ISO-8601 `startTime` and `endTime`; the complete-position query uses `positions.openedAt: {gte, lt}` with an exclusive upper bound. Neither parses relative-time phrases such as "today" or "this week". Resolve the phrase to explicit UTC bounds yourself. Anchor on `meta.serverTime` from your most recent Centaur list or stats response in this session, or the current workflow's `context.freshness.calculatedAt`. Before the first response, anchor on your own current UTC clock when the host provides one. Never anchor on the time of an MCP resource read; hosts cache resources for a whole session, so the `filter-guide` resource carries no timestamp.
 
 - "last 24h" — the rolling 24 hours ending at the anchor.
 - "today" — the current UTC calendar day ending at the anchor.
@@ -59,6 +59,8 @@ Omitting both bounds may apply a bounded default history window, and an explicit
 - A failed or partial read only qualifies the claims that depended on it. Claims backed by other successful reads in the same answer stand normally.
 
 ### Finish or qualify page walks
+
+For `screen_positions` or `POST /v2/positions/query`, use the separate context, continuation and full-population rules in [references/positions-and-evidence.md](references/positions-and-evidence.md). The rules below describe the existing list and aggregate reads.
 
 - List reads use forward-only cursor pagination. Pass `cursor` from `meta.nextCursor` to advance.
 - A page walk is complete only when the final page's `meta.hasMore` is `false`. Otherwise qualify the answer as partial, and never present partial pages as a complete ranking, count, or total.
@@ -124,6 +126,8 @@ Weight traders by the substance of what they said, not their message volume — 
 
 ## Working with events
 
+For a complete position book, exact position count, or position-return ranking with original sources, read [references/positions-and-evidence.md](references/positions-and-evidence.md). Check the connected catalog or target environment's OpenAPI before using the additive workflow; it may still be available only in staging.
+
 Events are the structured record of trade activity — opens, closes, increases, and decreases with prices, position references, source-message references, and trader attribution.
 
 Prices on event, feed, position, and open-position rows are expressed in the row's `quoteSymbol` (for example `USDT`, `USDC`, `CAD`), the quote currency of the asset's preferred market — never assume US dollars. `quoteSymbol` is `null` when unknown; omit the unit rather than guessing one.
@@ -160,3 +164,4 @@ Surface hidden events only on an explicit ask: if the user asks for assumed clos
 - [references/examples-curl.md](references/examples-curl.md) — copy-ready curl commands
 - [references/client-setup.md](references/client-setup.md) — Claude, ChatGPT, Cursor, and Codex MCP setup
 - [references/message-digests.md](references/message-digests.md) — weighting, filtering, and structuring message digests
+- [references/positions-and-evidence.md](references/positions-and-evidence.md) — complete position selections, return coverage and original sources
