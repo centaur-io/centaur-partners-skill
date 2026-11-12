@@ -1,11 +1,11 @@
 ---
 name: centaur-api
-description: Read-only Centaur trading data (api.centaur.io, mcp.centaur.io) - the activity feed, traders, trade events, positions, source messages, and generated summaries. Use when fetching or summarizing Centaur data over a configured Centaur MCP server or via REST with a Centaur API key, when generating Centaur API curl commands, or when a client needs Centaur MCP setup.
+description: Read-only Centaur trading data (api.centaur.io, mcp.centaur.io) - the activity feed, traders, trade events, trade views, positions, source messages, and generated summaries. Use when fetching or summarizing Centaur data over a configured Centaur MCP server or via REST with a Centaur API key, when generating Centaur API curl commands, or when a client needs Centaur MCP setup.
 ---
 
 # Centaur API
 
-Read-only Centaur trading data over MCP (`https://mcp.centaur.io/mcp`) or REST (`https://api.centaur.io/v2/*`). Read families: the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
+Read-only Centaur trading data over MCP (`https://mcp.centaur.io/mcp`) or REST (`https://api.centaur.io/v2/*`). Read families: the feed, events, trade views (beta), messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
 
 ## Choosing access
 
@@ -66,7 +66,7 @@ For `screen_positions` or `POST /v2/positions/query`, use the separate context, 
 - A page walk is complete only when the final page's `meta.hasMore` is `false`. Otherwise qualify the answer as partial, and never present partial pages as a complete ranking, count, or total.
 - Page walks are for itemized reads only. Ranking, count, and trend questions are served by `rank_traders`, `summarize_message_activity`, and the stats reads — never by paging `list_events` or `list_messages` rows to compute them.
 - Ordering is fixed per read; there is no client sort parameter.
-- Time-ordered reads (`list_feed`, `list_messages`, `list_events`, `list_positions`, `list_open_positions`, `list_channel_summaries`, `list_aggregate_summaries`) return newest rows first: canonical timestamp descending with `id` as the tiebreak.
+- Time-ordered reads (`list_feed`, `list_messages`, `list_events`, `list_views`, `list_positions`, `list_open_positions`, `list_channel_summaries`, `list_aggregate_summaries`) return newest rows first: canonical timestamp descending with `id` as the tiebreak.
 - Discovery reads (`list_trader_directory`, `list_trader_activity`, legacy `list_traders`, `list_assets`) return rows alphabetically: case-insensitive name ascending with `id` as the tiebreak.
 - The aggregate reads order differently: `rank_traders` rows follow the requested metric descending, not timestamp, and `summarize_message_activity` buckets ascend by bucket start within each group.
 
@@ -96,9 +96,20 @@ The feed is the presentation-ready view of recent trading activity: source-messa
 - `limit` counts message groups (default `20`, max `100`). Scroll back with `cursor`.
 - Poll for new activity with `since` (mutually exclusive with `cursor`): pass the newest `meta.nextCursor`. Results are whole-group upserts — replace any previously seen group by its `id`, because a group returns with all of its current events, including when an older message gains a late-recorded event. Keep the latest non-null `nextCursor` between polls, including from empty polls.
 - Filters: `traderIds` and `assetIds`, plus `startTime`/`endTime` on message post time.
+- `kinds` chooses `trade`, `view`, or both. Each group has `events` (trade events) and `views` (trade views, beta). `list_feed` returns both kinds when `kinds` is omitted; `GET /v2/feed` returns trade events only unless `kinds` asks for views. `GET /v1/feed` never returns trade views. With views requested, `events` can be empty. Use the same `kinds` on every `since` poll.
 - Feed event prices carry the same `quoteSymbol` unit rule as raw event rows — see [Working with events](#working-with-events).
 - Some sources may be editorially excluded from the feed while remaining visible on raw reads like `list_events`; this is expected, not missing data.
 - For flat event queries, counts, rankings, or system-event visibility, use `list_events` and the stats tools instead of the feed.
+
+## Working with trade views (beta)
+
+A trade view is a trader's long or short view on one asset, taken from one source message. A view is what a trader thinks; a trade event is what a trader did. A view opens no position and has no price, action type, lifecycle, or performance, so it never appears in `list_events` or positions. Trade views are in beta: their shape and filters may still change. Confirm `list_views` or `GET /v2/views` is in the connected catalog or OpenAPI before using it.
+
+- Use `list_views` or `GET /v2/views` for "what does X think about BTC" or "who is bullish on ETH". Use `list_events` and positions for "what did X trade" or "what does X hold".
+- Never report a view as a position, entry, or trade, and never compute returns, win rates, or other performance from views. Say "X is long BTC (a view, not a position)" when both could be confused.
+- A view's time is `writtenAt`, when its source message was posted. Fetch the post with `messageId` as `ids` on `list_messages`.
+- Trade view IDs and trade event IDs are separate number spaces: view `101` and event `101` are unrelated. Never pass a view ID where an event or position ID is expected.
+- The read needs `views.read`; the feed carries views under `feed.read` alone. See [references/auth.md](references/auth.md) for a `403` on an older key or connection.
 
 ## Working with messages
 
@@ -150,7 +161,8 @@ Surface hidden events only on an explicit ask: if the user asks for assumed clos
 - `list_trader_directory` / `list_assets` — first, when the right trader or asset ID is not known yet.
 - `rank_traders` — "most active" or "best performing" questions: ranks traders server-side by `event_count`, `position_count`, `win_rate`, `avg_return`, `median_return`, or `sharpe_ratio` without requiring trader IDs. The sample defaults to UTC year-to-date and the performance evaluation window defaults to `30D`. For performance metrics, qualify thin samples using the returned scored-versus-sampled coverage. Invalid combinations return retry alternatives; choose one explicitly and disclose any retry.
 - `summarize_message_activity` — "how much activity happened" questions: deterministic message/event counts, volumes, and trends, grouped by trader or overall and bucketed by hour, day, or week. It is a count read over raw data, not a generated narrative summary.
-- `list_events` — trade activity in order, with compact source-message references; skip assumed and auto-generated events by default.
+- `list_events` — trade activity in order, with compact source-message references; skip assumed and auto-generated events by default. It returns trades only, never trade views.
+- `list_views`: trade views (beta), what traders think about an asset, filtered by trader, asset, direction, and `writtenAt` bounds. Not trades and not evidence of performance; see [Working with trade views](#working-with-trade-views-beta).
 - `list_positions` — historical position performance and hydrating event `positionId` references. It accepts `positionIds` and returns open and closed positions with `timeBasedPerformances` for `1D`, `7D`, and `30D`; each window exposes `status` and `returnPercentage` only.
 - `list_open_positions` — current exposure: what is held right now and how it is performing.
 - `list_trader_stats` — aggregate per-trader metrics: win rate, average time-based return, asset focus.

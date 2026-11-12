@@ -12,7 +12,7 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 
 - Prefer Centaur MCP when the client already has Centaur configured.
 - Use REST when `CENTAUR_API_KEY` is available or when the user provides a one-time key in chat.
-- Help with the broader read-only trading data surface across the feed, events, messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
+- Help with the broader read-only trading data surface across the feed, events, trade views (beta), messages, Generated Aggregate Narrative Summaries, Generated Channel Narrative Summaries, positions, discovery, stats, trader rankings, and activity summaries.
 - Separate trader identity lookup from position-count selection; select trader messages independently of signal visibility.
 - Generate correct curl commands for the matching versioned GET read family.
 - Guide Claude, ChatGPT, Cursor, and Codex setup for the remote Centaur MCP server.
@@ -29,6 +29,8 @@ npx skills add https://github.com/centaur-io/centaur-partners-skill
 - API keys are self-serve REST credentials
 - Generated Aggregate Narrative Summaries and Generated Channel Narrative Summaries are standard read families
 - The feed (`GET /v2/feed`, `list_feed`) returns presentation-ready source-message groups with curated events; `since` polls for changes with whole-group upserts
+- Feed groups carry trade events in `events` and trade views (beta) in `views`; `kinds` selects them. `list_feed` returns both by default, `GET /v2/feed` returns trade events only unless `kinds` asks for views, and `GET /v1/feed` never returns views
+- Trade views (`GET /v2/views`, `list_views`, scope `views.read`, beta) are what a trader thinks, not what a trader did: no position, price, or performance. Their IDs are separate from trade event IDs
 - Summary tools may return empty pages when no generated summaries match the requested window; an empty page is a valid result, not a failed read
 - Reads accept only explicit ISO-8601 `startTime`/`endTime` and never parse relative-time phrases
 - A page walk is complete only when the final page's `meta.hasMore` is `false`

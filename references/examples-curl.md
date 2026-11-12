@@ -16,6 +16,24 @@ curl -s 'https://api.centaur.io/v2/feed?since=<nextCursor>' \
 
 Pass the newest `meta.nextCursor` as `since`; returned groups are whole-group upserts, so replace previously seen groups by `id`.
 
+## Feed with trade events and trade views
+
+```bash
+curl -s 'https://api.centaur.io/v2/feed?kinds=trade,view&limit=20' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
+Each group has `events` and `views`. Without `kinds`, `GET /v2/feed` returns trade events only.
+
+## A trader's trade views on one asset (beta)
+
+```bash
+curl -s 'https://api.centaur.io/v2/views?traderIds=<trader-id>&assetIds=<asset-id>&limit=20' \
+  -H "x-api-key: $CENTAUR_API_KEY"
+```
+
+A trade view is what the trader thinks, not a trade. Requires `views.read`.
+
 ## Trader activity with a minimum position count
 
 ```bash
